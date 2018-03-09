@@ -104,6 +104,7 @@ function toComment(sourceMap) {
 var svgFunc = __WEBPACK_IMPORTED_MODULE_1_svgjs__;
 var SvgContainerComponent = /** @class */ (function () {
     function SvgContainerComponent() {
+        this.height = 200;
     }
     SvgContainerComponent.prototype.ngAfterViewInit = function () {
         this.setContainer(this.containerId);
@@ -119,12 +120,13 @@ var SvgContainerComponent = /** @class */ (function () {
 SvgContainerComponent.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */], args: [{
                 selector: 'svg-container',
-                template: "<div [id]=\"containerId\">\n  <ng-content></ng-content>\n</div>"
+                template: "<div [id]=\"containerId\" [style.height.px]=\"height\">\n  <ng-content></ng-content>\n</div>"
             },] },
 ];
 SvgContainerComponent.ctorParameters = function () { return []; };
 SvgContainerComponent.propDecorators = {
     "containerId": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
+    "height": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
 };
 var SvgRectDirective = /** @class */ (function () {
     function SvgRectDirective(_svgContainer) {
@@ -161,6 +163,9 @@ var SvgRectDirective = /** @class */ (function () {
             .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
             .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
             .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+    };
+    SvgRectDirective.prototype.ngOnDestroy = function () {
+        this._rect.remove();
     };
     return SvgRectDirective;
 }());
@@ -221,6 +226,9 @@ var SvgCircleDirective = /** @class */ (function () {
             .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
             .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
     };
+    SvgCircleDirective.prototype.ngOnDestroy = function () {
+        this._circle.remove();
+    };
     return SvgCircleDirective;
 }());
 SvgCircleDirective.decorators = [
@@ -279,6 +287,9 @@ var SvgEllipseDirective = /** @class */ (function () {
             .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
             .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
     };
+    SvgEllipseDirective.prototype.ngOnDestroy = function () {
+        this._ellipse.remove();
+    };
     return SvgEllipseDirective;
 }());
 SvgEllipseDirective.decorators = [
@@ -336,6 +347,9 @@ var SvgLineDirective = /** @class */ (function () {
             .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
             .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
     };
+    SvgLineDirective.prototype.ngOnDestroy = function () {
+        this._line.remove();
+    };
     return SvgLineDirective;
 }());
 SvgLineDirective.decorators = [
@@ -392,6 +406,9 @@ var SvgPolylineDirective = /** @class */ (function () {
             .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
             .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
     };
+    SvgPolylineDirective.prototype.ngOnDestroy = function () {
+        this._polyline.remove();
+    };
     return SvgPolylineDirective;
 }());
 SvgPolylineDirective.decorators = [
@@ -445,6 +462,9 @@ var SvgPolygonDirective = /** @class */ (function () {
             .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
             .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
             .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+    };
+    SvgPolygonDirective.prototype.ngOnDestroy = function () {
+        this._polygon.remove();
     };
     return SvgPolygonDirective;
 }());
