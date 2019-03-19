@@ -83,7 +83,7 @@ function toComment(sourceMap) {
 
 /***/ }),
 
-/***/ "../../../../ngx-svg/esm5/ngx-svg.js":
+/***/ "../../../../ngx-svg/fesm5/ngx-svg.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -95,431 +95,1009 @@ function toComment(sourceMap) {
 /* unused harmony export ɵg */
 /* unused harmony export ɵf */
 /* unused harmony export ɵb */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs__ = __webpack_require__("../../../../svgjs/dist/svg.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_svgjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_svgjs__ = __webpack_require__("../../../../svgjs/dist/svg.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_svgjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_svgjs__);
 
 
 
-var svgFunc = __WEBPACK_IMPORTED_MODULE_1_svgjs__;
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var svgFunc = __WEBPACK_IMPORTED_MODULE_2_svgjs__;
 var SvgContainerComponent = /** @class */ (function () {
+    /**
+     * Create SVG Container component instance.
+     */
     function SvgContainerComponent() {
-        this.height = 200;
+        this.mouseInContainer = false;
+        // Container id which will be used to create the container.
+        this.height = 200; // Height of the container.
+        // Height of the container.
+        this.showGrid = false; // Indicator if grid image should be shown in the background of svg container.
+        // Indicator if grid image should be shown in the background of svg container.
+        this.hoverable = false; // Indicator if user should be able to see dot on hover, to capture coordinates.
+        // Indicator if user should be able to see dot on hover, to capture coordinates.
+        /**
+         * Output variables used within the component.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at clicked position
     }
-    SvgContainerComponent.prototype.ngAfterViewInit = function () {
+    /**
+     * Does all required pre-requisites before initializing the component.
+     */
+    /**
+     * Does all required pre-requisites before initializing the component.
+     * @return {?}
+     */
+    SvgContainerComponent.prototype.ngAfterViewInit = /**
+     * Does all required pre-requisites before initializing the component.
+     * @return {?}
+     */
+    function () {
         this.setContainer(this.containerId);
     };
-    SvgContainerComponent.prototype.setContainer = function (id) {
+    /**
+     * Does all required pre-requisites and adjusts hoverable point position.
+     * @param event - Mouse event handler from the DOM.
+     */
+    /**
+     * Does all required pre-requisites and adjusts hoverable point position.
+     * @param {?} event - Mouse event handler from the DOM.
+     * @return {?}
+     */
+    SvgContainerComponent.prototype.adjustPointPosition = /**
+     * Does all required pre-requisites and adjusts hoverable point position.
+     * @param {?} event - Mouse event handler from the DOM.
+     * @return {?}
+     */
+    function (event) {
+        // Return if we don't have hoverable enabled
+        if (!this.hoverable) {
+            return;
+        }
+        // Set correct point coordinates
+        this.pointXCoordinate = event.x - 5;
+        this.pointYCoordinate = event.y - 5;
+    };
+    /**
+     * Sets a container instance.
+     * @param id - ID of the container.
+     */
+    /**
+     * Sets a container instance.
+     * @param {?} id - ID of the container.
+     * @return {?}
+     */
+    SvgContainerComponent.prototype.setContainer = /**
+     * Sets a container instance.
+     * @param {?} id - ID of the container.
+     * @return {?}
+     */
+    function (id) {
         this._svg = svgFunc(id);
     };
-    SvgContainerComponent.prototype.getContainer = function () {
+    /**
+     * Retrieves container instance.
+     * @returns SVG Container instance.
+     */
+    /**
+     * Retrieves container instance.
+     * @return {?} SVG Container instance.
+     */
+    SvgContainerComponent.prototype.getContainer = /**
+     * Retrieves container instance.
+     * @return {?} SVG Container instance.
+     */
+    function () {
         return this._svg;
+    };
+    SvgContainerComponent.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */], args: [{
+                    selector: 'svg-container',
+                    template: "<div [id]=\"containerId\" [style.height.px]=\"height\" [class.grid]=\"showGrid\"\n  (mousemove)=\"adjustPointPosition($event)\" (mouseenter)=\"mouseInContainer = true\" (mouseleave)=\"mouseInContainer = false\">\n  <div class=\"hover-point\" (click)=\"clickEvent.emit($event)\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
+                    styles: [".grid{background:url(assets/images/grid.png)}.hover-point{background-color:#000;border:1px solid #fff;width:6px;height:6px;position:absolute;border-radius:50%}"]
+                }] }
+    ];
+    /** @nocollapse */
+    SvgContainerComponent.ctorParameters = function () { return []; };
+    SvgContainerComponent.propDecorators = {
+        containerId: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        showGrid: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        hoverable: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
     };
     return SvgContainerComponent;
 }());
-SvgContainerComponent.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */], args: [{
-                selector: 'svg-container',
-                template: "<div [id]=\"containerId\" [style.height.px]=\"height\">\n  <ng-content></ng-content>\n</div>"
-            },] },
-];
-SvgContainerComponent.ctorParameters = function () { return []; };
-SvgContainerComponent.propDecorators = {
-    "containerId": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "height": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SvgRectDirective = /** @class */ (function () {
+    /**
+     * Create SVG Rect directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
     function SvgRectDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
-        this.color = '#000';
-        this.x = 0;
-        this.y = 0;
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        // Width of the rectangular.
+        this.color = '#000'; // Color of the rectangular background
+        // Color of the rectangular background
+        this.x = 0; // Starting point on x axis.
+        // Starting point on x axis.
+        this.y = 0; // Starting point on y axis.
+        // Starting point on y axis.
+        /**
+         * Output variables for the rectangular directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
     }
-    SvgRectDirective.prototype.ngAfterViewChecked = function () {
+    /**
+     * Creates or updates the rectangular object within the container
+     */
+    /**
+     * Creates or updates the rectangular object within the container
+     * @return {?}
+     */
+    SvgRectDirective.prototype.ngAfterViewChecked = /**
+     * Creates or updates the rectangular object within the container
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no rectangular object is created
         if (this._svgContainer.getContainer() && !this._rect) {
             this.createRect();
         }
         else if (this._rect) {
+            // If we have already created the object, update it.
             this.updateRect();
         }
     };
-    SvgRectDirective.prototype.updateRect = function () {
+    /**
+     * Update rectangular object within the SVG container.
+     */
+    /**
+     * Update rectangular object within the SVG container.
+     * @return {?}
+     */
+    SvgRectDirective.prototype.updateRect = /**
+     * Update rectangular object within the SVG container.
+     * @return {?}
+     */
+    function () {
         this._rect
-            .size(this.width, this.height)
-            .fill(this.color)
-            .move(this.x, this.y);
+            .size(this.width, this.height) // Update the width and height
+            .fill(this.color) // Update the color
+            .move(this.x, this.y); // Update the coordinates
     };
-    SvgRectDirective.prototype.createRect = function () {
+    /**
+     * Create rectangular object within the SVG container.
+     */
+    /**
+     * Create rectangular object within the SVG container.
+     * @return {?}
+     */
+    SvgRectDirective.prototype.createRect = /**
+     * Create rectangular object within the SVG container.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._rect = this._svgContainer.getContainer()
-            .rect(this.width, this.height)
-            .fill(this.color)
-            .move(this.x, this.y)
-            .on('click', function (evt) { return _this.clickEvent.emit(evt); })
-            .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
-            .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
-            .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+            .rect(this.width, this.height) // Set height and width of the rect
+            .fill(this.color) // Set fill color
+            .move(this.x, this.y) // Set coordinates
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
     };
-    SvgRectDirective.prototype.ngOnDestroy = function () {
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgRectDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
         this._rect.remove();
+    };
+    SvgRectDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-rect'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgRectDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgRectDirective.propDecorators = {
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
     };
     return SvgRectDirective;
 }());
-SvgRectDirective.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */], args: [{
-                selector: 'svg-rect'
-            },] },
-];
-SvgRectDirective.ctorParameters = function () { return [
-    { type: SvgContainerComponent, },
-]; };
-SvgRectDirective.propDecorators = {
-    "height": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "width": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "color": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "x": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "y": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "clickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "doubleClickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOverEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOutEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SvgCircleDirective = /** @class */ (function () {
+    /**
+     * Create SVG Circle directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
     function SvgCircleDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
-        this.color = '#000';
-        this.x = 0;
-        this.y = 0;
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        // Radius of the circle
+        this.color = '#000'; // Color of the circle background
+        // Color of the circle background
+        this.x = 0; // Starting point on x axis.
+        // Starting point on x axis.
+        this.y = 0; // Starting point on y axis.
+        // Starting point on y axis.
+        /**
+         * Output variables for the circle directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
     }
-    SvgCircleDirective.prototype.ngAfterViewChecked = function () {
+    /**
+     * Creates or updates the circle object within the container.
+     */
+    /**
+     * Creates or updates the circle object within the container.
+     * @return {?}
+     */
+    SvgCircleDirective.prototype.ngAfterViewChecked = /**
+     * Creates or updates the circle object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no circle object is created
         if (this._svgContainer.getContainer() && !this._circle) {
             this.createCircle();
         }
         else if (this._circle) {
+            // If we have already created the object, update it.
             this.updateCircle();
         }
     };
-    SvgCircleDirective.prototype.updateCircle = function () {
+    /**
+     * Update circle object within the SVG container.
+     */
+    /**
+     * Update circle object within the SVG container.
+     * @return {?}
+     */
+    SvgCircleDirective.prototype.updateCircle = /**
+     * Update circle object within the SVG container.
+     * @return {?}
+     */
+    function () {
         this._circle
-            .radius(this.radius)
-            .fill(this.color)
-            .attr('cx', +this.x + +this.radius)
-            .attr('cy', +this.y + +this.radius);
+            .radius(this.radius) // Set the radius
+            .fill(this.color) // Set the fill color
+            .attr('cx', +this.x + +this.radius) // Set x position
+            .attr('cy', +this.y + +this.radius); // Set y position
     };
-    SvgCircleDirective.prototype.createCircle = function () {
+    /**
+     * Create circle object within the SVG container.
+     */
+    /**
+     * Create circle object within the SVG container.
+     * @return {?}
+     */
+    SvgCircleDirective.prototype.createCircle = /**
+     * Create circle object within the SVG container.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._circle = this._svgContainer.getContainer()
-            .circle(this.radius)
-            .fill(this.color)
-            .attr('cx', +this.x + +this.radius)
-            .attr('cy', +this.y + +this.radius)
-            .on('click', function (evt) { return _this.clickEvent.emit(evt); })
-            .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
-            .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
-            .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+            .circle(this.radius) // Create the circle with radius
+            .fill(this.color) // Set the fill color
+            .attr('cx', +this.x + +this.radius) // Set x position
+            .attr('cy', +this.y + +this.radius) // Set y position
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
     };
-    SvgCircleDirective.prototype.ngOnDestroy = function () {
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgCircleDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
         this._circle.remove();
+    };
+    SvgCircleDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-circle'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgCircleDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgCircleDirective.propDecorators = {
+        radius: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
     };
     return SvgCircleDirective;
 }());
-SvgCircleDirective.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */], args: [{
-                selector: 'svg-circle'
-            },] },
-];
-SvgCircleDirective.ctorParameters = function () { return [
-    { type: SvgContainerComponent, },
-]; };
-SvgCircleDirective.propDecorators = {
-    "radius": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "color": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "x": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "y": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "clickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "doubleClickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOverEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOutEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SvgEllipseDirective = /** @class */ (function () {
+    /**
+     * Create SVG Ellipse directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
     function SvgEllipseDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
-        this.color = '#000';
-        this.x = 0;
-        this.y = 0;
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        // Width of the ellipse.
+        this.color = '#000'; // Color of the ellipse background
+        // Color of the ellipse background
+        this.x = 0; // Starting point on x axis.
+        // Starting point on x axis.
+        this.y = 0; // Starting point on y axis.
+        // Starting point on y axis.
+        /**
+         * Output variables for the ellipse directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
     }
-    SvgEllipseDirective.prototype.ngAfterViewChecked = function () {
+    /**
+     * Creates or updates the ellipse object within the container
+     */
+    /**
+     * Creates or updates the ellipse object within the container
+     * @return {?}
+     */
+    SvgEllipseDirective.prototype.ngAfterViewChecked = /**
+     * Creates or updates the ellipse object within the container
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no ellipse object is created
         if (this._svgContainer.getContainer() && !this._ellipse) {
             this.createEllipse();
         }
         else if (this._ellipse) {
+            // If we have already created the object, update it.
             this.updateEllipse();
         }
     };
-    SvgEllipseDirective.prototype.updateEllipse = function () {
+    /**
+     * Update ellipse object within the SVG container.
+     */
+    /**
+     * Update ellipse object within the SVG container.
+     * @return {?}
+     */
+    SvgEllipseDirective.prototype.updateEllipse = /**
+     * Update ellipse object within the SVG container.
+     * @return {?}
+     */
+    function () {
         this._ellipse
-            .size(this.width, this.height)
-            .fill(this.color)
-            .attr('cx', +this.x + +this.width)
-            .attr('cy', +this.y + +this.height);
+            .size(this.width, this.height) // Update the width and height
+            .fill(this.color) // Update the color
+            .attr('cx', +this.x + +this.width) // Set x position
+            .attr('cy', +this.y + +this.height); // Set y position
     };
-    SvgEllipseDirective.prototype.createEllipse = function () {
+    /**
+     * Create ellipse object within the SVG container.
+     */
+    /**
+     * Create ellipse object within the SVG container.
+     * @return {?}
+     */
+    SvgEllipseDirective.prototype.createEllipse = /**
+     * Create ellipse object within the SVG container.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._ellipse = this._svgContainer.getContainer()
-            .ellipse(this.width, this.height)
-            .fill(this.color)
-            .attr('cx', +this.x + +this.width)
-            .attr('cy', +this.y + +this.height)
-            .on('click', function (evt) { return _this.clickEvent.emit(evt); })
-            .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
-            .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
-            .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+            .ellipse(this.width, this.height) // Set height and width of the ellipse
+            .fill(this.color) // Set fill color
+            .attr('cx', +this.x + +this.width) // Set x position
+            .attr('cy', +this.y + +this.height) // Set y position
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
     };
-    SvgEllipseDirective.prototype.ngOnDestroy = function () {
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgEllipseDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
         this._ellipse.remove();
+    };
+    SvgEllipseDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-ellipse'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgEllipseDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgEllipseDirective.propDecorators = {
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
     };
     return SvgEllipseDirective;
 }());
-SvgEllipseDirective.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */], args: [{
-                selector: 'svg-ellipse'
-            },] },
-];
-SvgEllipseDirective.ctorParameters = function () { return [
-    { type: SvgContainerComponent, },
-]; };
-SvgEllipseDirective.propDecorators = {
-    "height": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "width": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "color": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "x": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "y": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "clickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "doubleClickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOverEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOutEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SvgLineDirective = /** @class */ (function () {
+    /**
+     * Create SVG Line directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
     function SvgLineDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
-        this.borderColor = '#000';
-        this.x0 = 0;
-        this.y0 = 0;
-        this.x1 = 1;
-        this.y1 = 1;
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        // Size of the border.
+        this.borderColor = '#000'; // Color of the line.
+        // Color of the line.
+        this.x0 = 0; // Starting point on x axis.
+        // Starting point on x axis.
+        this.y0 = 0; // Starting point on y axis.
+        // Starting point on y axis.
+        this.x1 = 1; // Ending point on x axis.
+        // Ending point on x axis.
+        this.y1 = 1; // Ending point on y axis.
+        // Ending point on y axis.
+        /**
+         * Output variables for the line directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
     }
-    SvgLineDirective.prototype.ngAfterViewChecked = function () {
+    /**
+     * Creates or updates the line object within the container.
+     */
+    /**
+     * Creates or updates the line object within the container.
+     * @return {?}
+     */
+    SvgLineDirective.prototype.ngAfterViewChecked = /**
+     * Creates or updates the line object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no line object is created
         if (this._svgContainer.getContainer() && !this._line) {
             this.createLine();
         }
         else if (this._line) {
+            // If we have already created the object, update it.
             this.updateLine();
         }
     };
-    SvgLineDirective.prototype.updateLine = function () {
+    /**
+     * Update line object within the SVG container.
+     */
+    /**
+     * Update line object within the SVG container.
+     * @return {?}
+     */
+    SvgLineDirective.prototype.updateLine = /**
+     * Update line object within the SVG container.
+     * @return {?}
+     */
+    function () {
         this._line
-            .plot(this.x0, this.y0, this.x1, this.y1)
-            .stroke({ color: this.borderColor, width: this.borderSize });
+            .plot(this.x0, this.y0, this.x1, this.y1) // Create the line at specific position
+            .stroke({ color: this.borderColor, width: this.borderSize }); // Set the border for the line
     };
-    SvgLineDirective.prototype.createLine = function () {
+    /**
+     * Create line object within the SVG container.
+     */
+    /**
+     * Create line object within the SVG container.
+     * @return {?}
+     */
+    SvgLineDirective.prototype.createLine = /**
+     * Create line object within the SVG container.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._line = this._svgContainer.getContainer()
-            .line(this.x0, this.y0, this.x1, this.y1)
-            .stroke({ color: this.borderColor, width: this.borderSize })
-            .on('click', function (evt) { return _this.clickEvent.emit(evt); })
-            .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
-            .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
-            .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+            .line(this.x0, this.y0, this.x1, this.y1) // Create the line at specific position
+            .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the line
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
     };
-    SvgLineDirective.prototype.ngOnDestroy = function () {
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgLineDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
         this._line.remove();
+    };
+    SvgLineDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-line'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgLineDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgLineDirective.propDecorators = {
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        x0: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        y0: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        x1: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        y1: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
     };
     return SvgLineDirective;
 }());
-SvgLineDirective.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */], args: [{
-                selector: 'svg-line'
-            },] },
-];
-SvgLineDirective.ctorParameters = function () { return [
-    { type: SvgContainerComponent, },
-]; };
-SvgLineDirective.propDecorators = {
-    "borderSize": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "borderColor": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "x0": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "y0": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "x1": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "y1": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "clickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "doubleClickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOverEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOutEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SvgPolylineDirective = /** @class */ (function () {
+    /**
+     * Create SVG Polyline directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
     function SvgPolylineDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
-        this.borderColor = '#000';
-        this.fill = '#000';
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        // Size of the border.
+        this.borderColor = '#000'; // Color of the line.
+        // Color of the line.
+        this.fill = '#000'; // Color of the polyline body
+        // Color of the polyline body
+        /**
+         * Output variables for the polyline directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
     }
-    SvgPolylineDirective.prototype.ngAfterViewChecked = function () {
+    /**
+     * Creates or updates the polyline object within the container.
+     */
+    /**
+     * Creates or updates the polyline object within the container.
+     * @return {?}
+     */
+    SvgPolylineDirective.prototype.ngAfterViewChecked = /**
+     * Creates or updates the polyline object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no polyline object is created
         if (this._svgContainer.getContainer() && !this._polyline) {
             this.createPolyline();
         }
         else if (this._polyline) {
+            // If we have already created the object, update it.
             this.updatePolyline();
         }
     };
-    SvgPolylineDirective.prototype.updatePolyline = function () {
+    /**
+     * Update polyline object within the SVG container.
+     */
+    /**
+     * Update polyline object within the SVG container.
+     * @return {?}
+     */
+    SvgPolylineDirective.prototype.updatePolyline = /**
+     * Update polyline object within the SVG container.
+     * @return {?}
+     */
+    function () {
         this._polyline
-            .plot(this.points)
-            .stroke({ color: this.borderColor, width: this.borderSize });
+            .plot(this.points) // Update the polyline object
+            .fill(this.fill) // Fill color of the polyline
+            .stroke({ color: this.borderColor, width: this.borderSize }); // Set the border for the polyline
     };
-    SvgPolylineDirective.prototype.createPolyline = function () {
+    /**
+     * Create polyline object within the SVG container.
+     */
+    /**
+     * Create polyline object within the SVG container.
+     * @return {?}
+     */
+    SvgPolylineDirective.prototype.createPolyline = /**
+     * Create polyline object within the SVG container.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._polyline = this._svgContainer.getContainer()
-            .polyline(this.points)
-            .fill(this.fill)
-            .stroke({ color: this.borderColor, width: this.borderSize })
-            .on('click', function (evt) { return _this.clickEvent.emit(evt); })
-            .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
-            .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
-            .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+            .polyline(this.points) // Create the polyline object
+            .fill(this.fill) // Fill color of the polyline
+            .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the polyline
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
     };
-    SvgPolylineDirective.prototype.ngOnDestroy = function () {
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgPolylineDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
         this._polyline.remove();
+    };
+    SvgPolylineDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-polyline'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgPolylineDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgPolylineDirective.propDecorators = {
+        points: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        fill: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
     };
     return SvgPolylineDirective;
 }());
-SvgPolylineDirective.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */], args: [{
-                selector: 'svg-polyline'
-            },] },
-];
-SvgPolylineDirective.ctorParameters = function () { return [
-    { type: SvgContainerComponent, },
-]; };
-SvgPolylineDirective.propDecorators = {
-    "points": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "borderSize": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "borderColor": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "fill": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "clickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "doubleClickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOverEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOutEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SvgPolygonDirective = /** @class */ (function () {
+    /**
+     * Create SVG Polygon directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
     function SvgPolygonDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
-        this.borderColor = '#000';
-        this.fill = '#000';
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        // Size of the border.
+        this.borderColor = '#000'; // Color of the line.
+        // Color of the line.
+        this.fill = '#000'; // Color of the polygon body.
+        // Color of the polygon body.
+        /**
+         * Output variables for the polyline directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
     }
-    SvgPolygonDirective.prototype.ngAfterViewChecked = function () {
+    /**
+     * Creates or updates the polygon object within the container.
+     */
+    /**
+     * Creates or updates the polygon object within the container.
+     * @return {?}
+     */
+    SvgPolygonDirective.prototype.ngAfterViewChecked = /**
+     * Creates or updates the polygon object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no polygon object is created
         if (this._svgContainer.getContainer() && !this._polygon) {
             this.createPolygon();
         }
         else if (this._polygon) {
+            // If we have already created the object, update it.
             this.updatePolygon();
         }
     };
-    SvgPolygonDirective.prototype.updatePolygon = function () {
+    /**
+     * Update polygon object within the SVG container.
+     */
+    /**
+     * Update polygon object within the SVG container.
+     * @return {?}
+     */
+    SvgPolygonDirective.prototype.updatePolygon = /**
+     * Update polygon object within the SVG container.
+     * @return {?}
+     */
+    function () {
         this._polygon
-            .plot(this.points)
-            .stroke({ color: this.borderColor, width: this.borderSize });
+            .plot(this.points) // Update the polygon object
+            .fill(this.fill) // Fill color of the polygon
+            .stroke({ color: this.borderColor, width: this.borderSize }); // Set the border for the polygon
     };
-    SvgPolygonDirective.prototype.createPolygon = function () {
+    /**
+     * Create polygon object within the SVG container.
+     */
+    /**
+     * Create polygon object within the SVG container.
+     * @return {?}
+     */
+    SvgPolygonDirective.prototype.createPolygon = /**
+     * Create polygon object within the SVG container.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._polygon = this._svgContainer.getContainer()
-            .polygon(this.points)
-            .fill(this.fill)
-            .stroke({ color: this.borderColor, width: this.borderSize })
-            .on('click', function (evt) { return _this.clickEvent.emit(evt); })
-            .on('dblclick', function (evt) { return _this.doubleClickEvent.emit(evt); })
-            .on('mouseover', function (evt) { return _this.mouseOverEvent.emit(evt); })
-            .on('mouseout', function (evt) { return _this.mouseOutEvent.emit(evt); });
+            .polygon(this.points) // Create the polygon object
+            .fill(this.fill) // Fill color of the polygon
+            .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the polygon
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
     };
-    SvgPolygonDirective.prototype.ngOnDestroy = function () {
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgPolygonDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
         this._polygon.remove();
+    };
+    SvgPolygonDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-polygon'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgPolygonDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgPolygonDirective.propDecorators = {
+        points: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        fill: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
     };
     return SvgPolygonDirective;
 }());
-SvgPolygonDirective.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */], args: [{
-                selector: 'svg-polygon'
-            },] },
-];
-SvgPolygonDirective.ctorParameters = function () { return [
-    { type: SvgContainerComponent, },
-]; };
-SvgPolygonDirective.propDecorators = {
-    "points": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "borderSize": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "borderColor": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "fill": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */] },],
-    "clickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "doubleClickEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOverEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-    "mouseOutEvent": [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */] },],
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var NgxSvgModule = /** @class */ (function () {
     function NgxSvgModule() {
     }
+    NgxSvgModule.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */], args: [{
+                    imports: [
+                        __WEBPACK_IMPORTED_MODULE_0__angular_common__["b" /* CommonModule */]
+                    ],
+                    exports: [
+                        SvgContainerComponent,
+                        SvgRectDirective,
+                        SvgCircleDirective,
+                        SvgEllipseDirective,
+                        SvgLineDirective,
+                        SvgPolylineDirective,
+                        SvgPolygonDirective
+                    ],
+                    declarations: [
+                        SvgContainerComponent,
+                        SvgRectDirective,
+                        SvgCircleDirective,
+                        SvgEllipseDirective,
+                        SvgLineDirective,
+                        SvgPolylineDirective,
+                        SvgPolygonDirective
+                    ],
+                    providers: [],
+                },] }
+    ];
     return NgxSvgModule;
 }());
-NgxSvgModule.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */], args: [{
-                imports: [],
-                exports: [
-                    SvgContainerComponent,
-                    SvgRectDirective,
-                    SvgCircleDirective,
-                    SvgEllipseDirective,
-                    SvgLineDirective,
-                    SvgPolylineDirective,
-                    SvgPolygonDirective
-                ],
-                declarations: [
-                    SvgContainerComponent,
-                    SvgRectDirective,
-                    SvgCircleDirective,
-                    SvgEllipseDirective,
-                    SvgLineDirective,
-                    SvgPolylineDirective,
-                    SvgPolygonDirective
-                ],
-                providers: [],
-            },] },
-];
-NgxSvgModule.ctorParameters = function () { return []; };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
 
 
 //# sourceMappingURL=ngx-svg.js.map
-
 
 /***/ }),
 
