@@ -173,7 +173,7 @@ var AppModule = /** @class */ (function () {
 /***/ "../../../../../src/app/components/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" routerLink=\"/\">ngx-svg</a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#main-navigation\" aria-controls=\"main-navigation\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n  <div class=\"collapse navbar-collapse\" id=\"main-navigation\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/home\">Home</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/rect\">Rect</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/circle\">Circle</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/ellipse\">Ellipse</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/line\">Line</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/polyline\">Polyline</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/polygon\">Polygon</a>\n      </li>\n    </ul>\n    <a class=\"btn btn-dark\" href=\"https://github.com/vvaldersteins/ngx-svg\" target=\"_blank\"><i class=\"fa fa-github\"></i> GitHub</a>\n    <a class=\"btn btn-dark\" href=\"https://www.npmjs.com/package/ngx-svg\" target=\"_blank\"><i class=\"fa fa-npm\"></i> NPM</a>\n  </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" routerLink=\"/\">\n    ngx-svg <small class=\"extra-small\"><i>v0.2.3</i></small>\n  </a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#main-navigation\" aria-controls=\"main-navigation\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n  <div class=\"collapse navbar-collapse\" id=\"main-navigation\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/home\">Home</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/rect\">Rect</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/circle\">Circle</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/ellipse\">Ellipse</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/line\">Line</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/polyline\">Polyline</a>\n      </li>\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/polygon\">Polygon</a>\n      </li>\n    </ul>\n    <a class=\"btn btn-dark\" href=\"https://github.com/vvaldersteins/ngx-svg\" target=\"_blank\"><i class=\"fa fa-github\"></i> GitHub</a>\n    <a class=\"btn btn-dark\" href=\"https://www.npmjs.com/package/ngx-svg\" target=\"_blank\"><i class=\"fa fa-npm\"></i> NPM</a>\n  </div>\n</nav>"
 
 /***/ }),
 
@@ -282,7 +282,8 @@ var CircleComponent = /** @class */ (function () {
         return Math.max.apply(Math, this.circles.map(function (el) { return el.radius * 2 + el.y; })) + 20;
     };
     /**
-     * removes specific circle element.
+     * Removes specific circle element.
+     * @param index - Index of circle, which needs to be removed.
      */
     CircleComponent.prototype.removeRow = function (index) {
         this.circles.splice(index, 1);
@@ -368,7 +369,8 @@ var EllipseComponent = /** @class */ (function () {
         return Math.max.apply(Math, this.ellipses.map(function (el) { return el.height * 2 + el.y; })) + 20;
     };
     /**
-     * removes specific ellipses element.
+     * Removes specific ellipses element.
+     * @param index - Index of ellipse, which needs to be removed.
      */
     EllipseComponent.prototype.removeRow = function (index) {
         this.ellipses.splice(index, 1);
@@ -434,7 +436,7 @@ var HomeComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/pages/line/line.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Header of the line -->\n<div class=\"jumbotron jumbotron-fluid\">\n  <div class=\"container\">\n    <h1 class=\"display-4 text-center\">Line</h1>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row no-gutters\">\n    <div class=\"col-12\">\n      <!-- Svg Container with lines -->\n      <svg-container containerId=\"line\" [height]=\"getHeight()\">\n        <svg-line [borderSize]=\"line.borderSize\" [borderColor]=\"line.borderColor\"\n          [x0]=\"line.x0\" [y0]=\"line.y0\" [x1]=\"line.x1\" [y1]=\"line.y1\" *ngFor=\"let line of lines\"></svg-line>\n      </svg-container>\n    </div>\n\n    <div class=\"col-12\">\n      <!-- Svg line configuration -->\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>ID</th>\n              <th>Border Size</th>\n              <th>Border Color</th>\n              <th>X Start position</th>\n              <th>Y Start position</th>\n              <th>X End position</th>\n              <th>Y End position</th>\n              <th>Actions</th>\n            </tr>\n          </thead>\n          <tbody>\n            <ng-container *ngIf=\"lines.length > 0\">\n              <tr *ngFor=\"let line of lines; let index = index;\">\n                <td class=\"align-middle\">\n                  <b>{{ index + 1 }}</b>\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.borderSize\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"string\" [(ngModel)]=\"line.borderColor\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.x0\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.y0\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.x1\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.y1\" class=\"form-control\" />\n                </td>\n                <td>\n                  <button class=\"btn btn-danger\" (click)=\"removeRow(index)\">Remove</button>\n                </td>\n              </tr>\n            </ng-container>\n            <tr *ngIf=\"lines.length === 0\">\n              <td colspan=\"7\" class=\"text-center\">\n                There are no lines\n              </td>\n            </tr>\n          </tbody>\n          <tfoot>\n            <tr>\n              <td colspan=\"7\">\n                <button class=\"btn btn-success float-right\" (click)=\"addNew()\">Add New line</button>\n              </td>\n            </tr>\n          </tfoot>\n        </table>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<!-- Header of the line -->\n<div class=\"jumbotron jumbotron-fluid\">\n  <div class=\"container\">\n    <h1 class=\"display-4 text-center\">Line</h1>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row no-gutters\">\n    <div class=\"col-12\">\n      <!-- Svg Container with lines -->\n      <svg-container containerId=\"line\" [height]=\"getHeight()\">\n        <svg-line [borderSize]=\"line.borderSize\" [borderColor]=\"line.borderColor\"\n          [x0]=\"line.x0\" [y0]=\"line.y0\" [x1]=\"line.x1\" [y1]=\"line.y1\" *ngFor=\"let line of lines\"></svg-line>\n      </svg-container>\n    </div>\n\n    <div class=\"col-12\">\n      <!-- Svg line configuration -->\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>ID</th>\n              <th>Border Size</th>\n              <th>Border Color</th>\n              <th>X Start position</th>\n              <th>Y Start position</th>\n              <th>X End position</th>\n              <th>Y End position</th>\n              <th>Actions</th>\n            </tr>\n          </thead>\n          <tbody>\n            <ng-container *ngIf=\"lines.length > 0\">\n              <tr *ngFor=\"let line of lines; let index = index;\">\n                <td class=\"align-middle\">\n                  <b>{{ index + 1 }}</b>\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.borderSize\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"string\" [(ngModel)]=\"line.borderColor\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.x0\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.y0\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.x1\" class=\"form-control\" />\n                </td>\n                <td>\n                  <input type=\"number\" [(ngModel)]=\"line.y1\" class=\"form-control\" />\n                </td>\n                <td>\n                  <button class=\"btn btn-danger\" (click)=\"removeRow(index)\">Remove</button>\n                </td>\n              </tr>\n            </ng-container>\n            <tr *ngIf=\"lines.length === 0\">\n              <td colspan=\"8\" class=\"text-center\">\n                There are no lines\n              </td>\n            </tr>\n          </tbody>\n          <tfoot>\n            <tr>\n              <td colspan=\"8\">\n                <button class=\"btn btn-success float-right\" (click)=\"addNew()\">Add New line</button>\n              </td>\n            </tr>\n          </tfoot>\n        </table>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -516,7 +518,8 @@ var LineComponent = /** @class */ (function () {
         })) + 20;
     };
     /**
-     * removes specific line element.
+     * Removes specific line element.
+     * @param index - Index of a line which needs to be removed.
      */
     LineComponent.prototype.removeRow = function (index) {
         this.lines.splice(index, 1);
@@ -537,7 +540,7 @@ var LineComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/pages/polygon/polygon.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Header of the polygon -->\n<div class=\"jumbotron jumbotron-fluid\">\n  <div class=\"container\">\n    <h1 class=\"display-4 text-center\">Polygon (Under construction)</h1>\n  </div>\n</div>"
+module.exports = "<!-- Header of the polygon -->\n<div class=\"jumbotron jumbotron-fluid\">\n  <div class=\"container\">\n    <h1 class=\"display-4 text-center\">Polygon</h1>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row no-gutters\">\n    <div class=\"col-12\">\n      <!-- Svg Container with lines -->\n      <svg-container containerId=\"polygon\" [height]=\"getHeight()\">\n        <svg-polygon [borderSize]=\"polygon.borderSize\" [borderColor]=\"polygon.borderColor\"\n          [fill]=\"polygon.fill\" [points]=\"polygon.points\" *ngFor=\"let polygon of polygons\"></svg-polygon>\n      </svg-container>\n    </div>\n\n    <div class=\"col-12\">\n      <!-- Svg line configuration -->\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>ID</th>\n              <th>Border Size</th>\n              <th>Border Color</th>\n              <th>Fill Color</th>\n              <th class=\"text-center\">Points</th>\n              <th>Actions</th>\n            </tr>\n          </thead>\n          <tbody>\n            <ng-container *ngIf=\"polygons.length > 0\">\n              <tr *ngFor=\"let polygon of polygons; let index = index;\">\n                <td class=\"align-middle\">\n                  <b>{{ index + 1 }}</b>\n                </td>\n                <td class=\"align-middle\">\n                  <input type=\"number\" [(ngModel)]=\"polygon.borderSize\" class=\"form-control\" />\n                </td>\n                <td class=\"align-middle\">\n                  <input type=\"string\" [(ngModel)]=\"polygon.borderColor\" class=\"form-control\" />\n                </td>\n                <td class=\"align-middle\">\n                  <input type=\"string\" [(ngModel)]=\"polygon.fill\" class=\"form-control\" />\n                </td>\n                <td>\n                  <tr>\n                    <th>X point</th>\n                    <th>Y point</th>\n                    <th>Actions</th>\n                  </tr>\n\n                  <ng-container *ngIf=\"polygon.points.length > 0\">\n                    <tr *ngFor=\"let point of polygon.points; let pointIndex = index;\">\n                      <td>\n                        <input type=\"number\" [(ngModel)]=\"point[0]\" class=\"form-control\" />\n                      </td>\n                      <td>\n                        <input type=\"number\" [(ngModel)]=\"point[1]\" class=\"form-control\" />\n                      </td>\n                      <td>\n                        <button class=\"btn btn-danger\" (click)=\"removePoint(polygon, pointIndex)\">Remove</button>\n                      </td>\n                    </tr>\n                  </ng-container>\n\n                  <tr *ngIf=\"polygon.points.length === 0\">\n                    <td colspan=\"3\">\n                      There are no points for this polygon\n                    </td>\n                  </tr>\n\n                  <tr>\n                    <td colspan=\"3\">\n                      <button class=\"btn btn-success float-right\" (click)=\"addNewPoint(polygon)\">Add New Point</button>\n                    </td>\n                  </tr>\n                </td>\n                <td class=\"align-middle\">\n                  <button class=\"btn btn-danger\" (click)=\"removeRow(index)\">Remove</button>\n                </td>\n              </tr>\n            </ng-container>\n            <tr *ngIf=\"polygons.length === 0\">\n              <td colspan=\"6\" class=\"text-center\">\n                There are no polygons\n              </td>\n            </tr>\n          </tbody>\n          <tfoot>\n            <tr>\n              <td colspan=\"6\">\n                <button class=\"btn btn-success float-right\" (click)=\"addNew()\">Add New polygon</button>\n              </td>\n            </tr>\n          </tfoot>\n        </table>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -565,7 +568,69 @@ var PolygonComponent = /** @class */ (function () {
      * Creates polygon component object instance.
      */
     function PolygonComponent() {
+        /**
+         * Globally used variables within the component.
+         */
+        this.polygons = [{
+                borderSize: 2,
+                borderColor: 'rgba(125, 125, 32, 0.5)',
+                fill: 'rgba(100, 100, 20, 0.2)',
+                points: [[10, 100], [100, 100], [100, 10], [10, 10]]
+            }, {
+                borderSize: 3,
+                borderColor: 'rgba(23, 25, 255, 1)',
+                fill: 'rgba(0, 0, 0, 0)',
+                points: [[200, 150], [210, 190], [250, 200], [210, 210], [200, 250], [190, 210], [150, 200], [190, 190]]
+            }];
     }
+    /**
+     * Adds new polygon element.
+     */
+    PolygonComponent.prototype.addNew = function () {
+        this.polygons.push({
+            borderSize: 0,
+            borderColor: '#000',
+            points: [[]]
+        });
+    };
+    /**
+     * Retrieves the maximum height of all elements.
+     * @returns Height of the container.
+     */
+    PolygonComponent.prototype.getHeight = function () {
+        return Math.max.apply(Math, this.polygons.map(function (el) {
+            var maxValue;
+            var max = Math.max.apply(Math, el.points.map(function (point) {
+                if (maxValue === undefined || (maxValue !== undefined && point[1] > maxValue)) {
+                    maxValue = point[1];
+                }
+                return maxValue;
+            }));
+            return max;
+        })) + 20;
+    };
+    /**
+     * Adds new points element at the end of the list.
+     * @param polygon - Polygon object for which to add new points element.
+     */
+    PolygonComponent.prototype.addNewPoint = function (polygon) {
+        polygon.points.push([]);
+    };
+    /**
+     * Removes a specific point from the points list.
+     * @param polygon - Polygon object for which point needs to be removed.
+     * @param index - Index which needs to be removed.
+     */
+    PolygonComponent.prototype.removePoint = function (polygon, index) {
+        polygon.points.splice(index, 1);
+    };
+    /**
+     * Removes specific polygon element.
+     * @param index - Index which needs to be removed
+     */
+    PolygonComponent.prototype.removeRow = function (index) {
+        this.polygons.splice(index, 1);
+    };
     PolygonComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             template: __webpack_require__("../../../../../src/app/pages/polygon/polygon.component.html")
@@ -582,7 +647,7 @@ var PolygonComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/pages/polyline/polyline.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Header of the polyline -->\n<div class=\"jumbotron jumbotron-fluid\">\n  <div class=\"container\">\n    <h1 class=\"display-4 text-center\">Polyline (Under construction)</h1>\n  </div>\n</div>"
+module.exports = "<!-- Header of the polyline -->\n<div class=\"jumbotron jumbotron-fluid\">\n  <div class=\"container\">\n    <h1 class=\"display-4 text-center\">Polyline</h1>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row no-gutters\">\n    <div class=\"col-12\">\n      <!-- Svg Container with lines -->\n      <svg-container containerId=\"polyline\" [height]=\"getHeight()\">\n        <svg-polyline [borderSize]=\"polyline.borderSize\" [borderColor]=\"polyline.borderColor\"\n          [fill]=\"polyline.fill\" [points]=\"polyline.points\" *ngFor=\"let polyline of polylines\"></svg-polyline>\n      </svg-container>\n    </div>\n\n    <div class=\"col-12\">\n      <!-- Svg line configuration -->\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>ID</th>\n              <th>Border Size</th>\n              <th>Border Color</th>\n              <th>Fill Color</th>\n              <th class=\"text-center\">Points</th>\n              <th>Actions</th>\n            </tr>\n          </thead>\n          <tbody>\n            <ng-container *ngIf=\"polylines.length > 0\">\n              <tr *ngFor=\"let polyline of polylines; let index = index;\">\n                <td class=\"align-middle\">\n                  <b>{{ index + 1 }}</b>\n                </td>\n                <td class=\"align-middle\">\n                  <input type=\"number\" [(ngModel)]=\"polyline.borderSize\" class=\"form-control\" />\n                </td>\n                <td class=\"align-middle\">\n                  <input type=\"string\" [(ngModel)]=\"polyline.borderColor\" class=\"form-control\" />\n                </td>\n                <td class=\"align-middle\">\n                  <input type=\"string\" [(ngModel)]=\"polyline.fill\" class=\"form-control\" />\n                </td>\n                <td>\n                  <tr>\n                    <th>X point</th>\n                    <th>Y point</th>\n                    <th>Actions</th>\n                  </tr>\n\n                  <ng-container *ngIf=\"polyline.points.length > 0\">\n                    <tr *ngFor=\"let point of polyline.points; let pointIndex = index;\">\n                      <td>\n                        <input type=\"number\" [(ngModel)]=\"point[0]\" class=\"form-control\" />\n                      </td>\n                      <td>\n                        <input type=\"number\" [(ngModel)]=\"point[1]\" class=\"form-control\" />\n                      </td>\n                      <td>\n                        <button class=\"btn btn-danger\" (click)=\"removePoint(polyline, pointIndex)\">Remove</button>\n                      </td>\n                    </tr>\n                  </ng-container>\n\n                  <tr *ngIf=\"polyline.points.length === 0\">\n                    <td colspan=\"3\">\n                      There are no points for this polyline\n                    </td>\n                  </tr>\n\n                  <tr>\n                    <td colspan=\"3\">\n                      <button class=\"btn btn-success float-right\" (click)=\"addNewPoint(polyline)\">Add New Point</button>\n                    </td>\n                  </tr>\n                </td>\n                <td class=\"align-middle\">\n                  <button class=\"btn btn-danger\" (click)=\"removeRow(index)\">Remove</button>\n                </td>\n              </tr>\n            </ng-container>\n            <tr *ngIf=\"polylines.length === 0\">\n              <td colspan=\"6\" class=\"text-center\">\n                There are no polylines\n              </td>\n            </tr>\n          </tbody>\n          <tfoot>\n            <tr>\n              <td colspan=\"6\">\n                <button class=\"btn btn-success float-right\" (click)=\"addNew()\">Add New polyline</button>\n              </td>\n            </tr>\n          </tfoot>\n        </table>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -610,7 +675,69 @@ var PolylineComponent = /** @class */ (function () {
      * Creates polyline component object instance.
      */
     function PolylineComponent() {
+        /**
+         * Globally used variables within the component.
+         */
+        this.polylines = [{
+                borderSize: 2,
+                borderColor: 'rgba(125, 125, 32, 0.5)',
+                fill: 'rgba(100, 100, 20, 0.2)',
+                points: [[10, 100], [100, 100], [100, 10], [10, 10], [10, 100]]
+            }, {
+                borderSize: 3,
+                borderColor: 'rgba(23, 25, 255, 1)',
+                fill: 'rgba(0, 0, 0, 0)',
+                points: [[200, 150], [210, 190], [250, 200], [210, 210], [200, 250], [190, 210], [150, 200], [190, 190]]
+            }];
     }
+    /**
+     * Adds new polyline element.
+     */
+    PolylineComponent.prototype.addNew = function () {
+        this.polylines.push({
+            borderSize: 0,
+            borderColor: '#000',
+            points: [[]]
+        });
+    };
+    /**
+     * Retrieves the maximum height of all elements.
+     * @returns Height of the container.
+     */
+    PolylineComponent.prototype.getHeight = function () {
+        return Math.max.apply(Math, this.polylines.map(function (el) {
+            var maxValue;
+            var max = Math.max.apply(Math, el.points.map(function (point) {
+                if (maxValue === undefined || (maxValue !== undefined && point[1] > maxValue)) {
+                    maxValue = point[1];
+                }
+                return maxValue;
+            }));
+            return max;
+        })) + 20;
+    };
+    /**
+     * Adds new points element at the end of the list.
+     * @param polyline - Polyline object for which to add new points element.
+     */
+    PolylineComponent.prototype.addNewPoint = function (polyline) {
+        polyline.points.push([]);
+    };
+    /**
+     * Removes a specific point from the points list.
+     * @param polyline - Polyline object for which point needs to be removed.
+     * @param index - Index which needs to be removed.
+     */
+    PolylineComponent.prototype.removePoint = function (polyline, index) {
+        polyline.points.splice(index, 1);
+    };
+    /**
+     * Removes specific polyline element.
+     * @param index - Index which needs to be removed
+     */
+    PolylineComponent.prototype.removeRow = function (index) {
+        this.polylines.splice(index, 1);
+    };
     PolylineComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             template: __webpack_require__("../../../../../src/app/pages/polyline/polyline.component.html")
@@ -692,7 +819,8 @@ var RectComponent = /** @class */ (function () {
         return Math.max.apply(Math, this.rectangulars.map(function (el) { return el.height + el.y; })) + 20;
     };
     /**
-     * removes specific rectangular element.
+     * Removes specific rectangular element.
+     * @param index - Index of rectangular element, which needs to be removed.
      */
     RectComponent.prototype.removeRow = function (index) {
         this.rectangulars.splice(index, 1);
