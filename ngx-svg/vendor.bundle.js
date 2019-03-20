@@ -91,14 +91,15 @@ function toComment(sourceMap) {
 /* unused harmony export ɵa */
 /* unused harmony export ɵc */
 /* unused harmony export ɵd */
+/* unused harmony export ɵh */
 /* unused harmony export ɵe */
 /* unused harmony export ɵg */
 /* unused harmony export ɵf */
 /* unused harmony export ɵb */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_svgjs__ = __webpack_require__("../../../../svgjs/dist/svg.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_svgjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_svgjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs__ = __webpack_require__("../../../../svgjs/dist/svg.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_svgjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 
 
 
@@ -108,13 +109,14 @@ function toComment(sourceMap) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-var svgFunc = __WEBPACK_IMPORTED_MODULE_2_svgjs__;
+var svgFunc = __WEBPACK_IMPORTED_MODULE_1_svgjs__;
 var SvgContainerComponent = /** @class */ (function () {
     /**
      * Create SVG Container component instance.
      */
     function SvgContainerComponent() {
         this.mouseInContainer = false;
+        this._triggerCoordinateChange = false;
         // Container id which will be used to create the container.
         this.height = 200; // Height of the container.
         // Height of the container.
@@ -122,10 +124,12 @@ var SvgContainerComponent = /** @class */ (function () {
         // Indicator if grid image should be shown in the background of svg container.
         this.hoverable = false; // Indicator if user should be able to see dot on hover, to capture coordinates.
         // Indicator if user should be able to see dot on hover, to capture coordinates.
+        this.pointSize = 10; // Numeric value in pixels, to indicate how large should the point be.
+        // Numeric value in pixels, to indicate how large should the point be.
         /**
          * Output variables used within the component.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at clicked position
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at clicked position
     }
     /**
      * Does all required pre-requisites before initializing the component.
@@ -161,8 +165,40 @@ var SvgContainerComponent = /** @class */ (function () {
             return;
         }
         // Set correct point coordinates
-        this.pointXCoordinate = event.x - 5;
-        this.pointYCoordinate = event.y - 5;
+        if (this._triggerCoordinateChange) {
+            this.pointXCoordinate = event.layerX - this.pointSize / 2;
+            this.pointYCoordinate = event.layerY - this.pointSize / 2;
+        }
+        // Trigger coordinate change
+        this._triggerCoordinateChange = true;
+    };
+    /**
+     * Does all required pre-requisites when hovered point is clicked.
+     */
+    /**
+     * Does all required pre-requisites when hovered point is clicked.
+     * @return {?}
+     */
+    SvgContainerComponent.prototype.onPointClick = /**
+     * Does all required pre-requisites when hovered point is clicked.
+     * @return {?}
+     */
+    function () {
+        this.clickEvent.emit({ x: this.pointXCoordinate + this.pointSize / 2, y: this.pointYCoordinate + this.pointSize / 2 });
+    };
+    /**
+     * Make sure that we don't trigger coordinate change, if we hover point.
+     */
+    /**
+     * Make sure that we don't trigger coordinate change, if we hover point.
+     * @return {?}
+     */
+    SvgContainerComponent.prototype.onPointHover = /**
+     * Make sure that we don't trigger coordinate change, if we hover point.
+     * @return {?}
+     */
+    function () {
+        this._triggerCoordinateChange = false;
     };
     /**
      * Sets a container instance.
@@ -197,20 +233,21 @@ var SvgContainerComponent = /** @class */ (function () {
         return this._svg;
     };
     SvgContainerComponent.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["n" /* Component */], args: [{
                     selector: 'svg-container',
-                    template: "<div [id]=\"containerId\" [style.height.px]=\"height\" [class.grid]=\"showGrid\"\n  (mousemove)=\"adjustPointPosition($event)\" (mouseenter)=\"mouseInContainer = true\" (mouseleave)=\"mouseInContainer = false\">\n  <div class=\"hover-point\" (click)=\"clickEvent.emit($event)\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
-                    styles: [".grid{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE3MkE0MEYzQURBQTExREZBN0MxQjk4RDBDM0ZCMzk1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE3MkE0MEY0QURBQTExREZBN0MxQjk4RDBDM0ZCMzk1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTcyQTQwRjFBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTcyQTQwRjJBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6babduAAAAIVBMVEX///9kZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRPODiSAAAAC3RSTlMAMDM8Y5zDzM/Y84lH4NsAAAApSURBVCjPY2CAAcYABkzAnDAqSFdBJRhQaYIzGcphoHI5nDkadINKEAAryRsp9gQvagAAAABJRU5ErkJggg==)}.hover-point{background-color:#000;border:1px solid #fff;width:6px;height:6px;position:absolute;border-radius:50%}"]
+                    template: "<div [id]=\"containerId\" class=\"svg-container\" [style.height.px]=\"height\" [class.svg-grid]=\"showGrid\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event)\" (mouseenter)=\"mouseInContainer = true\" (mouseleave)=\"mouseInContainer = false\">\n  <div class=\"svg-hover-point\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover()\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
+                    styles: [".svg-grid{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE3MkE0MEYzQURBQTExREZBN0MxQjk4RDBDM0ZCMzk1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE3MkE0MEY0QURBQTExREZBN0MxQjk4RDBDM0ZCMzk1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTcyQTQwRjFBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTcyQTQwRjJBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6babduAAAAIVBMVEX///9kZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRPODiSAAAAC3RSTlMAMDM8Y5zDzM/Y84lH4NsAAAApSURBVCjPY2CAAcYABkzAnDAqSFdBJRhQaYIzGcphoHI5nDkadINKEAAryRsp9gQvagAAAABJRU5ErkJggg==)}.svg-hover-point{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container{position:relative}"]
                 }] }
     ];
     /** @nocollapse */
     SvgContainerComponent.ctorParameters = function () { return []; };
     SvgContainerComponent.propDecorators = {
-        containerId: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        height: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        showGrid: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        hoverable: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
+        containerId: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        showGrid: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        hoverable: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        pointSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
     };
     return SvgContainerComponent;
 }());
@@ -236,10 +273,10 @@ var SvgRectDirective = /** @class */ (function () {
         /**
          * Output variables for the rectangular directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the rectangular object within the container
@@ -332,7 +369,7 @@ var SvgRectDirective = /** @class */ (function () {
         this._rect.remove();
     };
     SvgRectDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-rect'
                 },] }
     ];
@@ -341,15 +378,15 @@ var SvgRectDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgRectDirective.propDecorators = {
-        height: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        width: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        color: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        x: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        y: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
     };
     return SvgRectDirective;
 }());
@@ -375,10 +412,10 @@ var SvgCircleDirective = /** @class */ (function () {
         /**
          * Output variables for the circle directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the circle object within the container.
@@ -473,7 +510,7 @@ var SvgCircleDirective = /** @class */ (function () {
         this._circle.remove();
     };
     SvgCircleDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-circle'
                 },] }
     ];
@@ -482,14 +519,14 @@ var SvgCircleDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgCircleDirective.propDecorators = {
-        radius: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        color: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        x: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        y: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
+        radius: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
     };
     return SvgCircleDirective;
 }());
@@ -515,10 +552,10 @@ var SvgEllipseDirective = /** @class */ (function () {
         /**
          * Output variables for the ellipse directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the ellipse object within the container
@@ -613,7 +650,7 @@ var SvgEllipseDirective = /** @class */ (function () {
         this._ellipse.remove();
     };
     SvgEllipseDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-ellipse'
                 },] }
     ];
@@ -622,15 +659,15 @@ var SvgEllipseDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgEllipseDirective.propDecorators = {
-        height: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        width: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        color: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        x: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        y: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
     };
     return SvgEllipseDirective;
 }());
@@ -660,10 +697,10 @@ var SvgLineDirective = /** @class */ (function () {
         /**
          * Output variables for the line directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the line object within the container.
@@ -754,7 +791,7 @@ var SvgLineDirective = /** @class */ (function () {
         this._line.remove();
     };
     SvgLineDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-line'
                 },] }
     ];
@@ -763,16 +800,16 @@ var SvgLineDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgLineDirective.propDecorators = {
-        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        x0: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        y0: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        x1: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        y1: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        x0: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        y0: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        x1: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        y1: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
     };
     return SvgLineDirective;
 }());
@@ -796,10 +833,10 @@ var SvgPolylineDirective = /** @class */ (function () {
         /**
          * Output variables for the polyline directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the polyline object within the container.
@@ -892,7 +929,7 @@ var SvgPolylineDirective = /** @class */ (function () {
         this._polyline.remove();
     };
     SvgPolylineDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-polyline'
                 },] }
     ];
@@ -901,14 +938,14 @@ var SvgPolylineDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgPolylineDirective.propDecorators = {
-        points: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        fill: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
+        points: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        fill: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
     };
     return SvgPolylineDirective;
 }());
@@ -932,10 +969,10 @@ var SvgPolygonDirective = /** @class */ (function () {
         /**
          * Output variables for the polyline directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the polygon object within the container.
@@ -1028,7 +1065,7 @@ var SvgPolygonDirective = /** @class */ (function () {
         this._polygon.remove();
     };
     SvgPolygonDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-polygon'
                 },] }
     ];
@@ -1037,16 +1074,197 @@ var SvgPolygonDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgPolygonDirective.propDecorators = {
-        points: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        fill: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["P" /* Output */] }]
+        points: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        fill: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
     };
     return SvgPolygonDirective;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SvgImageDirective = /** @class */ (function () {
+    /**
+     * Create SVG image directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
+    function SvgImageDirective(_svgContainer) {
+        this._svgContainer = _svgContainer;
+        // Path to the image for SVG image.
+        this.x = 0; // Starting point on x axis.
+        // Starting point on x axis.
+        this.y = 0; // Starting point on y axis.
+        // Starting point on y axis.
+        this.height = 100; // Height of the image.
+        // Height of the image.
+        this.width = 100; // Width of the image.
+        // Width of the image.
+        /**
+         * Output variables for the image directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+    }
+    /**
+     * Is called when changes are made to the object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgImageDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        // Make sure we check it only when image is initialized
+        if (this._image) {
+            // Update image also in case image url has changed
+            if (changes.imageUrl && changes.imageUrl.currentValue !== changes.imageUrl.previousValue) {
+                // Update image properties and image itself
+                this.updateImage(true);
+            }
+            else if ((changes.x && changes.x.currentValue !== changes.x.previousValue) ||
+                (changes.y && changes.y.currentValue !== changes.y.previousValue) ||
+                (changes.width && changes.width.currentValue !== changes.width.previousValue) ||
+                (changes.height && changes.height.currentValue !== changes.height.previousValue)) {
+                // Update only image properties
+                this.updateImage(false);
+            }
+        }
+    };
+    /**
+     * Creates or updates the image object within the container.
+     */
+    /**
+     * Creates or updates the image object within the container.
+     * @return {?}
+     */
+    SvgImageDirective.prototype.ngAfterViewChecked = /**
+     * Creates or updates the image object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no image object is created
+        if (this._svgContainer.getContainer() && !this._image) {
+            this.createImage();
+        }
+    };
+    /**
+     * Update image object within the SVG container.
+     * @param reloadImage - Boolean indicator if image should be reloaded.
+     */
+    /**
+     * Update image object within the SVG container.
+     * @param {?} reloadImage - Boolean indicator if image should be reloaded.
+     * @return {?}
+     */
+    SvgImageDirective.prototype.updateImage = /**
+     * Update image object within the SVG container.
+     * @param {?} reloadImage - Boolean indicator if image should be reloaded.
+     * @return {?}
+     */
+    function (reloadImage) {
+        console.log('called');
+        // Check if we have to update only image properties, or also image itself
+        if (reloadImage) {
+            this._image
+                .load(this.imageUrl) // Update image
+                .size(this.width, this.height) // Update image size
+                .move(this.x, this.y); // Update image position
+        }
+        else { // Update just image properties
+            this._image
+                .size(this.width, this.height) // Update image size
+                .move(this.x, this.y); // Update image position
+        }
+    };
+    /**
+     * Create image object within the SVG container.
+     */
+    /**
+     * Create image object within the SVG container.
+     * @return {?}
+     */
+    SvgImageDirective.prototype.createImage = /**
+     * Create image object within the SVG container.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._image = this._svgContainer.getContainer()
+            .image() // Assign image object
+            .load(this.imageUrl) // Load image
+            .size(this.width, this.height) // Assign image size
+            .move(this.x, this.y) // Assign position
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+    };
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgImageDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
+        this._image.remove();
+    };
+    SvgImageDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-image'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgImageDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgImageDirective.propDecorators = {
+        imageUrl: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+    };
+    return SvgImageDirective;
 }());
 
 /**
@@ -1057,7 +1275,7 @@ var NgxSvgModule = /** @class */ (function () {
     function NgxSvgModule() {
     }
     NgxSvgModule.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["I" /* NgModule */], args: [{
                     imports: [
                         __WEBPACK_IMPORTED_MODULE_0__angular_common__["b" /* CommonModule */]
                     ],
@@ -1068,7 +1286,8 @@ var NgxSvgModule = /** @class */ (function () {
                         SvgEllipseDirective,
                         SvgLineDirective,
                         SvgPolylineDirective,
-                        SvgPolygonDirective
+                        SvgPolygonDirective,
+                        SvgImageDirective
                     ],
                     declarations: [
                         SvgContainerComponent,
@@ -1077,7 +1296,8 @@ var NgxSvgModule = /** @class */ (function () {
                         SvgEllipseDirective,
                         SvgLineDirective,
                         SvgPolylineDirective,
-                        SvgPolygonDirective
+                        SvgPolygonDirective,
+                        SvgImageDirective
                     ],
                     providers: [],
                 },] }
