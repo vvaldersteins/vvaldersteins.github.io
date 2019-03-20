@@ -473,7 +473,7 @@ var ImageComponent = /** @class */ (function () {
          * Globally used variables within the component.
          */
         this.images = [{
-                imageUrl: 'assets/dog.png',
+                imageUrl: 'ngx-svg/assets/dog.png',
                 x: 100,
                 y: 100,
                 width: 100,
@@ -486,7 +486,7 @@ var ImageComponent = /** @class */ (function () {
      */
     ImageComponent.prototype.addNew = function () {
         this.images.push({
-            imageUrl: 'assets/dog.png',
+            imageUrl: 'ngx-svg/assets/dog.png',
             x: 0,
             y: 0,
             width: 100,
