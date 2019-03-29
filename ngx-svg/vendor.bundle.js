@@ -96,10 +96,13 @@ function toComment(sourceMap) {
 /* unused harmony export ɵg */
 /* unused harmony export ɵf */
 /* unused harmony export ɵb */
+/* unused harmony export ɵi */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs__ = __webpack_require__("../../../../svgjs/dist/svg.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_svgjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+
 
 
 
@@ -129,7 +132,9 @@ var SvgContainerComponent = /** @class */ (function () {
         /**
          * Output variables used within the component.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at clicked position
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at clicked position
+        // Event handler for retrieving coordinates at clicked position
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at position where you double-click.
     }
     /**
      * Does all required pre-requisites before initializing the component.
@@ -184,7 +189,40 @@ var SvgContainerComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.clickEvent.emit({ x: this.pointXCoordinate + this.pointSize / 2, y: this.pointYCoordinate + this.pointSize / 2 });
+        var _this = this;
+        // Indicate that single click has happened.
+        this.singleClickHappened = true;
+        // Assign coordinates
+        /** @type {?} */
+        var x = this.pointXCoordinate + this.pointSize / 2;
+        /** @type {?} */
+        var y = this.pointYCoordinate + this.pointSize / 2;
+        // Set timeout, to make sure we cancel it if double-click happens.
+        setTimeout((/**
+         * @return {?}
+         */
+        function () {
+            if (_this.singleClickHappened) {
+                _this.clickEvent.emit({ x: x, y: y });
+            }
+        }), 250);
+    };
+    /**
+     * Does all required pre-requisites when hovered point is double clicked.
+     */
+    /**
+     * Does all required pre-requisites when hovered point is double clicked.
+     * @return {?}
+     */
+    SvgContainerComponent.prototype.onPointDoubleClick = /**
+     * Does all required pre-requisites when hovered point is double clicked.
+     * @return {?}
+     */
+    function () {
+        // Now let's fire double click event
+        this.doubleClickEvent.emit({ x: this.pointXCoordinate + this.pointSize / 2, y: this.pointYCoordinate + this.pointSize / 2 });
+        // First let's set that double click has happened
+        this.singleClickHappened = false;
     };
     /**
      * Make sure that we don't trigger coordinate change, if we hover point.
@@ -233,21 +271,22 @@ var SvgContainerComponent = /** @class */ (function () {
         return this._svg;
     };
     SvgContainerComponent.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["n" /* Component */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["n" /* Component */], args: [{
                     selector: 'svg-container',
-                    template: "<div [id]=\"containerId\" class=\"svg-container\" [style.height.px]=\"height\" [class.svg-grid]=\"showGrid\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event)\" (mouseenter)=\"mouseInContainer = true\" (mouseleave)=\"mouseInContainer = false\">\n  <div class=\"svg-hover-point\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover()\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
+                    template: "<div [id]=\"containerId\" class=\"svg-container\" [style.height.px]=\"height\" [class.svg-grid]=\"showGrid\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event)\" (mouseenter)=\"mouseInContainer = true\" (mouseleave)=\"mouseInContainer = false\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover()\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
                     styles: [".svg-grid{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE3MkE0MEYzQURBQTExREZBN0MxQjk4RDBDM0ZCMzk1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE3MkE0MEY0QURBQTExREZBN0MxQjk4RDBDM0ZCMzk1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTcyQTQwRjFBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTcyQTQwRjJBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6babduAAAAIVBMVEX///9kZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRPODiSAAAAC3RSTlMAMDM8Y5zDzM/Y84lH4NsAAAApSURBVCjPY2CAAcYABkzAnDAqSFdBJRhQaYIzGcphoHI5nDkadINKEAAryRsp9gQvagAAAABJRU5ErkJggg==)}.svg-hover-point{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container{position:relative}"]
                 }] }
     ];
     /** @nocollapse */
     SvgContainerComponent.ctorParameters = function () { return []; };
     SvgContainerComponent.propDecorators = {
-        containerId: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        showGrid: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        hoverable: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        pointSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        containerId: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        showGrid: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        hoverable: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        pointSize: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgContainerComponent;
 }());
@@ -270,13 +309,15 @@ var SvgRectDirective = /** @class */ (function () {
         // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
         // Starting point on y axis.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
         /**
          * Output variables for the rectangular directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the rectangular object within the container
@@ -294,9 +335,56 @@ var SvgRectDirective = /** @class */ (function () {
         if (this._svgContainer.getContainer() && !this._rect) {
             this.createRect();
         }
-        else if (this._rect) {
+    };
+    /**
+     * Is called when changes are made to the rect object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the rect object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgRectDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the rect object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._rect) {
             // If we have already created the object, update it.
             this.updateRect();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
         }
     };
     /**
@@ -353,6 +441,59 @@ var SvgRectDirective = /** @class */ (function () {
          * @return {?}
          */
         function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the rect
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the rect object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the rect object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgRectDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the rect object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._rect
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._rect
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
     };
     /**
      * Does all required pre-requisites before destroying the component.
@@ -369,7 +510,7 @@ var SvgRectDirective = /** @class */ (function () {
         this._rect.remove();
     };
     SvgRectDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-rect'
                 },] }
     ];
@@ -378,15 +519,16 @@ var SvgRectDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgRectDirective.propDecorators = {
-        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        width: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        color: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgRectDirective;
 }());
@@ -409,23 +551,25 @@ var SvgCircleDirective = /** @class */ (function () {
         // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
         // Starting point on y axis.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
         /**
          * Output variables for the circle directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
-     * Creates or updates the circle object within the container.
+     * Creates the circle object within the container.
      */
     /**
-     * Creates or updates the circle object within the container.
+     * Creates the circle object within the container.
      * @return {?}
      */
     SvgCircleDirective.prototype.ngAfterViewChecked = /**
-     * Creates or updates the circle object within the container.
+     * Creates the circle object within the container.
      * @return {?}
      */
     function () {
@@ -433,9 +577,56 @@ var SvgCircleDirective = /** @class */ (function () {
         if (this._svgContainer.getContainer() && !this._circle) {
             this.createCircle();
         }
-        else if (this._circle) {
+    };
+    /**
+     * Is called when changes are made to the circle object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the circle object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgCircleDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the circle object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._circle) {
             // If we have already created the object, update it.
             this.updateCircle();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
         }
     };
     /**
@@ -494,6 +685,59 @@ var SvgCircleDirective = /** @class */ (function () {
          * @return {?}
          */
         function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the circle
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the circle object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the circle object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgCircleDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the circle object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._circle
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._circle
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
     };
     /**
      * Does all required pre-requisites before destroying the component.
@@ -510,7 +754,7 @@ var SvgCircleDirective = /** @class */ (function () {
         this._circle.remove();
     };
     SvgCircleDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-circle'
                 },] }
     ];
@@ -519,14 +763,15 @@ var SvgCircleDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgCircleDirective.propDecorators = {
-        radius: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        color: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        radius: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgCircleDirective;
 }());
@@ -549,13 +794,15 @@ var SvgEllipseDirective = /** @class */ (function () {
         // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
         // Starting point on y axis.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
         /**
          * Output variables for the ellipse directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the ellipse object within the container
@@ -573,9 +820,56 @@ var SvgEllipseDirective = /** @class */ (function () {
         if (this._svgContainer.getContainer() && !this._ellipse) {
             this.createEllipse();
         }
-        else if (this._ellipse) {
+    };
+    /**
+     * Is called when changes are made to the ellipse object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the ellipse object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgEllipseDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the ellipse object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._ellipse) {
             // If we have already created the object, update it.
             this.updateEllipse();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
         }
     };
     /**
@@ -634,6 +928,59 @@ var SvgEllipseDirective = /** @class */ (function () {
          * @return {?}
          */
         function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the ellipse
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the ellipse object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the ellipse object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgEllipseDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the ellipse object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._ellipse
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._ellipse
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
     };
     /**
      * Does all required pre-requisites before destroying the component.
@@ -650,7 +997,7 @@ var SvgEllipseDirective = /** @class */ (function () {
         this._ellipse.remove();
     };
     SvgEllipseDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-ellipse'
                 },] }
     ];
@@ -659,15 +1006,16 @@ var SvgEllipseDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgEllipseDirective.propDecorators = {
-        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        width: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        color: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgEllipseDirective;
 }());
@@ -694,13 +1042,15 @@ var SvgLineDirective = /** @class */ (function () {
         // Ending point on x axis.
         this.y1 = 1; // Ending point on y axis.
         // Ending point on y axis.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
         /**
          * Output variables for the line directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the line object within the container.
@@ -718,9 +1068,56 @@ var SvgLineDirective = /** @class */ (function () {
         if (this._svgContainer.getContainer() && !this._line) {
             this.createLine();
         }
-        else if (this._line) {
+    };
+    /**
+     * Is called when changes are made to the line object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the line object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgLineDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the line object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._line) {
             // If we have already created the object, update it.
             this.updateLine();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
         }
     };
     /**
@@ -775,6 +1172,59 @@ var SvgLineDirective = /** @class */ (function () {
          * @return {?}
          */
         function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the line
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the line object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the line object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgLineDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the line object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._line
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._line
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
     };
     /**
      * Does all required pre-requisites before destroying the component.
@@ -791,7 +1241,7 @@ var SvgLineDirective = /** @class */ (function () {
         this._line.remove();
     };
     SvgLineDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-line'
                 },] }
     ];
@@ -800,16 +1250,17 @@ var SvgLineDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgLineDirective.propDecorators = {
-        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        x0: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        y0: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        x1: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        y1: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x0: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y0: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x1: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y1: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgLineDirective;
 }());
@@ -826,17 +1277,19 @@ var SvgPolylineDirective = /** @class */ (function () {
     function SvgPolylineDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
         // Size of the border.
-        this.borderColor = '#000'; // Color of the line.
-        // Color of the line.
+        this.borderColor = '#000'; // Color of the polyline.
+        // Color of the polyline.
         this.fill = '#000'; // Color of the polyline body
         // Color of the polyline body
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
         /**
          * Output variables for the polyline directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the polyline object within the container.
@@ -854,9 +1307,56 @@ var SvgPolylineDirective = /** @class */ (function () {
         if (this._svgContainer.getContainer() && !this._polyline) {
             this.createPolyline();
         }
-        else if (this._polyline) {
+    };
+    /**
+     * Is called when changes are made to the polyline object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the polyline object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgPolylineDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the polyline object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._polyline) {
             // If we have already created the object, update it.
             this.updatePolyline();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
         }
     };
     /**
@@ -913,6 +1413,59 @@ var SvgPolylineDirective = /** @class */ (function () {
          * @return {?}
          */
         function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the polyline
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the polyline object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the polyline object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgPolylineDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the polyline object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._polyline
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._polyline
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
     };
     /**
      * Does all required pre-requisites before destroying the component.
@@ -929,7 +1482,7 @@ var SvgPolylineDirective = /** @class */ (function () {
         this._polyline.remove();
     };
     SvgPolylineDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-polyline'
                 },] }
     ];
@@ -938,14 +1491,15 @@ var SvgPolylineDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgPolylineDirective.propDecorators = {
-        points: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        fill: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        points: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        fill: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgPolylineDirective;
 }());
@@ -962,17 +1516,19 @@ var SvgPolygonDirective = /** @class */ (function () {
     function SvgPolygonDirective(_svgContainer) {
         this._svgContainer = _svgContainer;
         // Size of the border.
-        this.borderColor = '#000'; // Color of the line.
-        // Color of the line.
+        this.borderColor = '#000'; // Color of the polygon.
+        // Color of the polygon.
         this.fill = '#000'; // Color of the polygon body.
         // Color of the polygon body.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
         /**
-         * Output variables for the polyline directive.
+         * Output variables for the polygon directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Creates or updates the polygon object within the container.
@@ -990,9 +1546,56 @@ var SvgPolygonDirective = /** @class */ (function () {
         if (this._svgContainer.getContainer() && !this._polygon) {
             this.createPolygon();
         }
-        else if (this._polygon) {
+    };
+    /**
+     * Is called when changes are made to the polygon object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the polygon object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgPolygonDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the polygon object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._polygon) {
             // If we have already created the object, update it.
             this.updatePolygon();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
         }
     };
     /**
@@ -1049,6 +1652,59 @@ var SvgPolygonDirective = /** @class */ (function () {
          * @return {?}
          */
         function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the polygon
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the polygon object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the polygon object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgPolygonDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the polygon object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._polygon
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._polygon
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
     };
     /**
      * Does all required pre-requisites before destroying the component.
@@ -1065,7 +1721,7 @@ var SvgPolygonDirective = /** @class */ (function () {
         this._polygon.remove();
     };
     SvgPolygonDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-polygon'
                 },] }
     ];
@@ -1074,14 +1730,15 @@ var SvgPolygonDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgPolygonDirective.propDecorators = {
-        points: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        fill: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        points: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        fill: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgPolygonDirective;
 }());
@@ -1106,25 +1763,44 @@ var SvgImageDirective = /** @class */ (function () {
         // Height of the image.
         this.width = 100; // Width of the image.
         // Width of the image.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
         /**
          * Output variables for the image directive.
          */
-        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
-        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["v" /* EventEmitter */]();
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
-     * Is called when changes are made to the object.
+     * Creates the image object within the container.
+     */
+    /**
+     * Creates the image object within the container.
+     * @return {?}
+     */
+    SvgImageDirective.prototype.ngAfterViewChecked = /**
+     * Creates the image object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no image object is created
+        if (this._svgContainer.getContainer() && !this._image) {
+            this.createImage();
+        }
+    };
+    /**
+     * Is called when changes are made to the image object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
     /**
-     * Is called when changes are made to the object.
+     * Is called when changes are made to the image object.
      * @param {?} changes - Angular Simple Changes object containing all of the changes.
      * @return {?}
      */
     SvgImageDirective.prototype.ngOnChanges = /**
-     * Is called when changes are made to the object.
+     * Is called when changes are made to the image object.
      * @param {?} changes - Angular Simple Changes object containing all of the changes.
      * @return {?}
      */
@@ -1143,23 +1819,37 @@ var SvgImageDirective = /** @class */ (function () {
                 // Update only image properties
                 this.updateImage(false);
             }
-        }
-    };
-    /**
-     * Creates or updates the image object within the container.
-     */
-    /**
-     * Creates or updates the image object within the container.
-     * @return {?}
-     */
-    SvgImageDirective.prototype.ngAfterViewChecked = /**
-     * Creates or updates the image object within the container.
-     * @return {?}
-     */
-    function () {
-        // Check if container is creatted and no image object is created
-        if (this._svgContainer.getContainer() && !this._image) {
-            this.createImage();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
         }
     };
     /**
@@ -1177,7 +1867,6 @@ var SvgImageDirective = /** @class */ (function () {
      * @return {?}
      */
     function (reloadImage) {
-        console.log('called');
         // Check if we have to update only image properties, or also image itself
         if (reloadImage) {
             this._image
@@ -1229,6 +1918,59 @@ var SvgImageDirective = /** @class */ (function () {
          * @return {?}
          */
         function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the image
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the image object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the image object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgImageDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the image object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._image
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._image
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
     };
     /**
      * Does all required pre-requisites before destroying the component.
@@ -1245,7 +1987,7 @@ var SvgImageDirective = /** @class */ (function () {
         this._image.remove();
     };
     SvgImageDirective.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["s" /* Directive */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
                     selector: 'svg-image'
                 },] }
     ];
@@ -1254,17 +1996,268 @@ var SvgImageDirective = /** @class */ (function () {
         { type: SvgContainerComponent }
     ]; };
     SvgImageDirective.propDecorators = {
-        imageUrl: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        x: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        y: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        height: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        width: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["D" /* Input */] }],
-        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }],
-        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["P" /* Output */] }]
+        imageUrl: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        height: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        width: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgImageDirective;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SvgTextDirective = /** @class */ (function () {
+    /**
+     * Create SVG Text directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
+    function SvgTextDirective(_svgContainer) {
+        this._svgContainer = _svgContainer;
+        /**
+         * Import variables for the text directive.
+         */
+        this.color = '#000'; // Color of the text.
+        // Color of the text.
+        this.text = ''; // Text which needs to be displayed.
+        // Text which needs to be displayed.
+        this.x = 0; // Starting point on x axis.
+        // Starting point on x axis.
+        this.y = 0; // Starting point on y axis.
+        // Starting point on y axis.
+        this.size = 10; // Size of the text.
+        // Size of the text.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
+        /**
+         * Output variables for the text directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+    }
+    /**
+     * Creates the text object within the container.
+     */
+    /**
+     * Creates the text object within the container.
+     * @return {?}
+     */
+    SvgTextDirective.prototype.ngAfterViewChecked = /**
+     * Creates the text object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no text object is created
+        if (this._svgContainer.getContainer() && !this._text) {
+            this.createText();
+        }
+    };
+    /**
+     * Is called when changes are made to the text object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the text object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgTextDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the text object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._text) {
+            // If we have already created the object, update it.
+            this.updateText();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
+        }
+    };
+    /**
+     * Update text object within the SVG container.
+     */
+    /**
+     * Update text object within the SVG container.
+     * @return {?}
+     */
+    SvgTextDirective.prototype.updateText = /**
+     * Update text object within the SVG container.
+     * @return {?}
+     */
+    function () {
+        this._text
+            .text(this.text) // Update the text for the element
+            .fill(this.color) // Update the color of the text
+            .size(this.size) // Update the size of the text
+            .move(this.x, this.y); // Update the location of the text
+    };
+    /**
+     * Create text object within the SVG container.
+     */
+    /**
+     * Create text object within the SVG container.
+     * @return {?}
+     */
+    SvgTextDirective.prototype.createText = /**
+     * Create text object within the SVG container.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._text = this._svgContainer.getContainer()
+            .text(this.text) // Set the text for the element
+            .fill(this.color) // Set the color of the text
+            .size(this.size) // Set the size of the text
+            .move(this.x, this.y) // Set the location of the text
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the text
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the text object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the text object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgTextDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the text object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._text
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._text
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
+    };
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgTextDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
+        this._text.remove();
+    };
+    SvgTextDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-text'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgTextDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgTextDirective.propDecorators = {
+        color: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        text: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        size: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
+    };
+    return SvgTextDirective;
 }());
 
 /**
@@ -1275,7 +2268,7 @@ var NgxSvgModule = /** @class */ (function () {
     function NgxSvgModule() {
     }
     NgxSvgModule.decorators = [
-        { type: __WEBPACK_IMPORTED_MODULE_2__angular_core__["I" /* NgModule */], args: [{
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["I" /* NgModule */], args: [{
                     imports: [
                         __WEBPACK_IMPORTED_MODULE_0__angular_common__["b" /* CommonModule */]
                     ],
@@ -1287,7 +2280,8 @@ var NgxSvgModule = /** @class */ (function () {
                         SvgLineDirective,
                         SvgPolylineDirective,
                         SvgPolygonDirective,
-                        SvgImageDirective
+                        SvgImageDirective,
+                        SvgTextDirective
                     ],
                     declarations: [
                         SvgContainerComponent,
@@ -1297,7 +2291,8 @@ var NgxSvgModule = /** @class */ (function () {
                         SvgLineDirective,
                         SvgPolylineDirective,
                         SvgPolygonDirective,
-                        SvgImageDirective
+                        SvgImageDirective,
+                        SvgTextDirective
                     ],
                     providers: [],
                 },] }
@@ -12785,7 +13780,7 @@ return SVG
 /* unused harmony export __awaiter */
 /* unused harmony export __generator */
 /* unused harmony export __exportStar */
-/* unused harmony export __values */
+/* harmony export (immutable) */ __webpack_exports__["c"] = __values;
 /* unused harmony export __read */
 /* unused harmony export __spread */
 /* unused harmony export __await */
