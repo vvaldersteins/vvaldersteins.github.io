@@ -93,10 +93,11 @@ function toComment(sourceMap) {
 /* unused harmony export ɵd */
 /* unused harmony export ɵh */
 /* unused harmony export ɵe */
+/* unused harmony export ɵi */
 /* unused harmony export ɵg */
 /* unused harmony export ɵf */
 /* unused harmony export ɵb */
-/* unused harmony export ɵi */
+/* unused harmony export ɵj */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs__ = __webpack_require__("../../../../svgjs/dist/svg.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_svgjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_svgjs__);
@@ -116,8 +117,10 @@ var svgFunc = __WEBPACK_IMPORTED_MODULE_1_svgjs__;
 var SvgContainerComponent = /** @class */ (function () {
     /**
      * Create SVG Container component instance.
+     * @param cdRef - Change Detector Ref object instance.
      */
-    function SvgContainerComponent() {
+    function SvgContainerComponent(cdRef) {
+        this.cdRef = cdRef;
         this.mouseInContainer = false;
         this._triggerCoordinateChange = false;
         // Container id which will be used to create the container.
@@ -169,6 +172,13 @@ var SvgContainerComponent = /** @class */ (function () {
                     // Remove viewbox
                     this._svg.viewbox();
                 }
+            }
+            // Check if any other input variables have changed
+            if (changes.height && changes.height.currentValue !== changes.height.previousValue ||
+                changes.showGrid && changes.showGrid.currentValue !== changes.showGrid.previousValue ||
+                changes.hoverable && changes.hoverable.currentValue !== changes.hoverable.previousValue ||
+                changes.pointSize && changes.pointSize.currentValue !== changes.pointSize.previousValue) {
+                this.cdRef.detectChanges();
             }
         }
     };
@@ -321,7 +331,9 @@ var SvgContainerComponent = /** @class */ (function () {
                 }] }
     ];
     /** @nocollapse */
-    SvgContainerComponent.ctorParameters = function () { return []; };
+    SvgContainerComponent.ctorParameters = function () { return [
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["k" /* ChangeDetectorRef */] }
+    ]; };
     SvgContainerComponent.propDecorators = {
         containerId: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
         height: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
@@ -2058,6 +2070,259 @@ var SvgImageDirective = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var SvgPathDirective = /** @class */ (function () {
+    /**
+     * Create SVG Path directive.
+     * @param _svgContainer - Host SVG Container Component object instance.
+     */
+    function SvgPathDirective(_svgContainer) {
+        this._svgContainer = _svgContainer;
+        /**
+         * Import variables for the path directive.
+         */
+        this.path = ''; // Path which needs to be displayed.
+        // Path which needs to be displayed.
+        this.borderColor = '#000'; // Color of the border.
+        // Color of the border.
+        this.borderSize = 2; // Size of the border.
+        // Size of the border.
+        this.x = 0; // Starting point on x axis.
+        // Starting point on x axis.
+        this.y = 0; // Starting point on y axis.
+        // Starting point on y axis.
+        this.fill = ''; // Fill color of the path.
+        // Fill color of the path.
+        this.classes = []; // List of CSS classes which needs to be added.
+        // List of CSS classes which needs to be added.
+        /**
+         * Output variables for the path directive.
+         */
+        this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
+    }
+    /**
+     * Creates the path object within the container.
+     */
+    /**
+     * Creates the path object within the container.
+     * @return {?}
+     */
+    SvgPathDirective.prototype.ngAfterViewChecked = /**
+     * Creates the path object within the container.
+     * @return {?}
+     */
+    function () {
+        // Check if container is creatted and no path object is created
+        if (this._svgContainer.getContainer() && !this._path) {
+            this.createPath();
+        }
+    };
+    /**
+     * Is called when changes are made to the path object.
+     * @param changes - Angular Simple Changes object containing all of the changes.
+     */
+    /**
+     * Is called when changes are made to the path object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    SvgPathDirective.prototype.ngOnChanges = /**
+     * Is called when changes are made to the path object.
+     * @param {?} changes - Angular Simple Changes object containing all of the changes.
+     * @return {?}
+     */
+    function (changes) {
+        if (this._path) {
+            // If we have already created the object, update it.
+            this.updatePath();
+            // Check if classes were changed
+            if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
+                // Get classes that needs to be removed
+                /** @type {?} */
+                var classesToRemove = changes.classes.previousValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.currentValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Get classes that needs to be added
+                /** @type {?} */
+                var classesToAdd = changes.classes.currentValue.filter((/**
+                 * @param {?} previousClass
+                 * @return {?}
+                 */
+                function (previousClass) {
+                    return !changes.classes.previousValue.some((/**
+                     * @param {?} currentClass
+                     * @return {?}
+                     */
+                    function (currentClass) { return currentClass === previousClass; }));
+                }));
+                // Add and remove classes
+                this.addRemoveClasses(classesToAdd, classesToRemove);
+            }
+        }
+    };
+    /**
+     * Update path object within the SVG container.
+     */
+    /**
+     * Update path object within the SVG container.
+     * @return {?}
+     */
+    SvgPathDirective.prototype.updatePath = /**
+     * Update path object within the SVG container.
+     * @return {?}
+     */
+    function () {
+        this._path
+            .plot(this.path) // Update the path for the element
+            .stroke({ color: this.borderColor, width: this.borderSize }) // Update the border for the
+            .fill(this.fill === '' ? 'rgba(0, 0, 0, 0)' : this.fill) // Update fill of the path
+            .move(this.x, this.y); // Update the location of the path
+    };
+    /**
+     * Create path object within the SVG container.
+     */
+    /**
+     * Create path object within the SVG container.
+     * @return {?}
+     */
+    SvgPathDirective.prototype.createPath = /**
+     * Create path object within the SVG container.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._path = this._svgContainer.getContainer()
+            .path(this.path) // Set the path for the element
+            .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the path
+            .fill(this.fill === '' ? 'rgba(0, 0, 0, 0)' : this.fill) // Set fill of the path
+            .move(this.x, this.y) // Set the location of the path
+            .on('click', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.clickEvent.emit(evt); })) // Assign click event
+            .on('dblclick', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.doubleClickEvent.emit(evt); })) // Assign double click event
+            .on('mouseover', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOverEvent.emit(evt); })) // Assign mouse over event
+            .on('mouseout', (/**
+         * @param {?} evt
+         * @return {?}
+         */
+        function (evt) { return _this.mouseOutEvent.emit(evt); })); // Assign mouse out event
+        // Add classes to the path
+        this.addRemoveClasses(this.classes);
+    };
+    /**
+     * Adds classes to the path object.
+     * @param classesToAdd - List of classes, which needs to be added.
+     * @param classesToRemove - List of classes, which needs to be removed.
+     */
+    /**
+     * Adds classes to the path object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    SvgPathDirective.prototype.addRemoveClasses = /**
+     * Adds classes to the path object.
+     * @param {?} classesToAdd - List of classes, which needs to be added.
+     * @param {?=} classesToRemove - List of classes, which needs to be removed.
+     * @return {?}
+     */
+    function (classesToAdd, classesToRemove) {
+        if (classesToRemove === void 0) { classesToRemove = []; }
+        var e_1, _a, e_2, _b;
+        try {
+            // First let's remove classes, that are not necessary anymore
+            for (var classesToRemove_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToRemove), classesToRemove_1_1 = classesToRemove_1.next(); !classesToRemove_1_1.done; classesToRemove_1_1 = classesToRemove_1.next()) {
+                var classToRemove = classesToRemove_1_1.value;
+                this._path
+                    .removeClass(classToRemove);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (classesToRemove_1_1 && !classesToRemove_1_1.done && (_a = classesToRemove_1.return)) _a.call(classesToRemove_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            // Now let's add new classes
+            for (var classesToAdd_1 = Object(__WEBPACK_IMPORTED_MODULE_2_tslib__["c" /* __values */])(classesToAdd), classesToAdd_1_1 = classesToAdd_1.next(); !classesToAdd_1_1.done; classesToAdd_1_1 = classesToAdd_1.next()) {
+                var classToAdd = classesToAdd_1_1.value;
+                this._path
+                    .addClass(classToAdd);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (classesToAdd_1_1 && !classesToAdd_1_1.done && (_b = classesToAdd_1.return)) _b.call(classesToAdd_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
+    };
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    SvgPathDirective.prototype.ngOnDestroy = /**
+     * Does all required pre-requisites before destroying the component.
+     * @return {?}
+     */
+    function () {
+        this._path.remove();
+    };
+    SvgPathDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["s" /* Directive */], args: [{
+                    selector: 'svg-path'
+                },] }
+    ];
+    /** @nocollapse */
+    SvgPathDirective.ctorParameters = function () { return [
+        { type: SvgContainerComponent }
+    ]; };
+    SvgPathDirective.propDecorators = {
+        path: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        borderColor: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        borderSize: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        x: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        y: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        fill: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        classes: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
+        clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
+    };
+    return SvgPathDirective;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SvgTextDirective = /** @class */ (function () {
     /**
      * Create SVG Text directive.
@@ -2325,6 +2590,7 @@ var NgxSvgModule = /** @class */ (function () {
                         SvgPolylineDirective,
                         SvgPolygonDirective,
                         SvgImageDirective,
+                        SvgPathDirective,
                         SvgTextDirective
                     ],
                     declarations: [
@@ -2336,6 +2602,7 @@ var NgxSvgModule = /** @class */ (function () {
                         SvgPolylineDirective,
                         SvgPolygonDirective,
                         SvgImageDirective,
+                        SvgPathDirective,
                         SvgTextDirective
                     ],
                     providers: [],
