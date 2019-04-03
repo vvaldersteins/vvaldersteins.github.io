@@ -115,6 +115,7 @@ function toComment(sourceMap) {
 /** @type {?} */
 var svgFunc = __WEBPACK_IMPORTED_MODULE_1_svgjs__;
 var SvgContainerComponent = /** @class */ (function () {
+    // Event handler when the mouse is being moved on the container.
     /**
      * Create SVG Container component instance.
      * @param cdRef - Change Detector Ref object instance.
@@ -140,6 +141,12 @@ var SvgContainerComponent = /** @class */ (function () {
         this.clickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at clicked position
         // Event handler for retrieving coordinates at clicked position
         this.doubleClickEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */](); // Event handler for retrieving coordinates at position where you double-click.
+        // Event handler for retrieving coordinates at position where you double-click.
+        this.mouseOverEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */](); // Event handler when mouse is moved over the container.
+        // Event handler when mouse is moved over the container.
+        this.mouseOutEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */](); // Event handler when the mouse exits the container.
+        // Event handler when the mouse exits the container.
+        this.mouseMoveEvent = new __WEBPACK_IMPORTED_MODULE_3__angular_core__["v" /* EventEmitter */]();
     }
     /**
      * Does all required pre-requisites when input variables changes.
@@ -224,6 +231,34 @@ var SvgContainerComponent = /** @class */ (function () {
         this._triggerCoordinateChange = true;
     };
     /**
+     * Adjust the mouse move position, and sends out to the user.
+     * @param event - Mouse event handler from the DOM.
+     */
+    /**
+     * Adjust the mouse move position, and sends out to the user.
+     * @param {?} event - Mouse event handler from the DOM.
+     * @return {?}
+     */
+    SvgContainerComponent.prototype.adjustMouseMovePosition = /**
+     * Adjust the mouse move position, and sends out to the user.
+     * @param {?} event - Mouse event handler from the DOM.
+     * @return {?}
+     */
+    function (event) {
+        if ((this.hoverable && this._triggerCoordinateChange)) {
+            this.mouseMoveEvent.emit({
+                x: this.pointXCoordinate + this.pointSize / 2,
+                y: this.pointYCoordinate + this.pointSize / 2
+            });
+        }
+        else if (!this.hoverable) {
+            this.mouseMoveEvent.emit({
+                x: event.layerX,
+                y: event.layerY
+            });
+        }
+    };
+    /**
      * Does all required pre-requisites when hovered point is clicked.
      */
     /**
@@ -265,9 +300,9 @@ var SvgContainerComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        // Now let's fire double click event
+        // Let's fire double click event
         this.doubleClickEvent.emit({ x: this.pointXCoordinate + this.pointSize / 2, y: this.pointYCoordinate + this.pointSize / 2 });
-        // First let's set that double click has happened
+        // Let's set that double click has happened
         this.singleClickHappened = false;
     };
     /**
@@ -326,7 +361,7 @@ var SvgContainerComponent = /** @class */ (function () {
     SvgContainerComponent.decorators = [
         { type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["n" /* Component */], args: [{
                     selector: 'svg-container',
-                    template: "<div [id]=\"containerId\" class=\"svg-container\" [style.height.px]=\"height\" [class.svg-grid]=\"showGrid\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event)\" (mouseenter)=\"mouseInContainer = true\" (mouseleave)=\"mouseInContainer = false\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover()\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
+                    template: "<div [id]=\"containerId\" class=\"svg-container\" [style.height.px]=\"height\" [class.svg-grid]=\"showGrid\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event); adjustMouseMovePosition($event);\" (mouseenter)=\"mouseInContainer = true; mouseOverEvent.emit($event);\"\n  (mouseleave)=\"mouseInContainer = false; mouseOutEvent.emit($event);\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover();\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
                     styles: [".svg-grid{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE3MkE0MEYzQURBQTExREZBN0MxQjk4RDBDM0ZCMzk1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE3MkE0MEY0QURBQTExREZBN0MxQjk4RDBDM0ZCMzk1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTcyQTQwRjFBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTcyQTQwRjJBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6babduAAAAIVBMVEX///9kZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRPODiSAAAAC3RSTlMAMDM8Y5zDzM/Y84lH4NsAAAApSURBVCjPY2CAAcYABkzAnDAqSFdBJRhQaYIzGcphoHI5nDkadINKEAAryRsp9gQvagAAAABJRU5ErkJggg==)}.svg-hover-point{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container{position:relative}"]
                 }] }
     ];
@@ -342,7 +377,10 @@ var SvgContainerComponent = /** @class */ (function () {
         pointSize: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
         viewBox: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["D" /* Input */] }],
         clickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
-        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
+        doubleClickEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOverEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseOutEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }],
+        mouseMoveEvent: [{ type: __WEBPACK_IMPORTED_MODULE_3__angular_core__["P" /* Output */] }]
     };
     return SvgContainerComponent;
 }());
