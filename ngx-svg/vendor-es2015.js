@@ -81606,13 +81606,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function SvgContainerComponent_div_1_Template(rf, ctx) { if (rf & 1) {
-    const _r651 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    const _r3859 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r651); const ctx_r650 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r650.onPointDoubleClick(); })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r651); const ctx_r652 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r652.onPointClick(); })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r651); const ctx_r653 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r653.onPointHover(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859); const ctx_r3858 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r3858.onPointDoubleClick(); })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859); const ctx_r3860 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r3860.onPointClick(); })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859); const ctx_r3861 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r3861.onPointHover(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
-    const ctx_r649 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r649.pointSize, "px")("height", ctx_r649.pointSize, "px")("left", ctx_r649.pointXCoordinate, "px")("top", ctx_r649.pointYCoordinate, "px");
+    const ctx_r3857 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r3857.pointSize, "px")("height", ctx_r3857.pointSize, "px")("left", ctx_r3857.pointXCoordinate, "px")("top", ctx_r3857.pointYCoordinate, "px");
 } }
 const _c0 = ["*"];
 let SvgContainerComponent = class SvgContainerComponent {
@@ -81623,10 +81623,15 @@ let SvgContainerComponent = class SvgContainerComponent {
      */
     constructor(cdRef) {
         this.cdRef = cdRef;
-        this.mouseInContainer = false;
         this._triggerCoordinateChange = false;
+        this.mouseInContainer = false;
         this.height = 200; // Height of the container.
         this.showGrid = false; // Indicator if grid image should be shown in the background of svg container.
+        this.grid = {
+            width: 10,
+            height: 10,
+            strokeColor: 'black'
+        }; // Grid object based on which the grid for the svg will be constructed
         this.hoverable = false; // Indicator if user should be able to see dot on hover, to capture coordinates.
         this.pointSize = 10; // Numeric value in pixels, to indicate how large should the point be.
         this.viewBox = []; // Viewbox of the container, must be an array consisting of 4 integers [x, y, width, height].
@@ -81664,9 +81669,16 @@ let SvgContainerComponent = class SvgContainerComponent {
             if (changes.height && changes.height.currentValue !== changes.height.previousValue) {
                 this._svg.size('100%', changes.height.currentValue);
             }
+            // Let's update pattern in case grid was changed
+            if (changes.showGrid || changes.grid) {
+                // Update values
+                this.grid = changes.grid ? changes.grid.currentValue : this.grid;
+                this.showGrid = changes.showGrid ? changes.showGrid.currentValue : this.showGrid;
+                // Let's update the pattern
+                this.setGridPattern();
+            }
             // Check if any other input variables have changed
-            if (changes.showGrid && changes.showGrid.currentValue !== changes.showGrid.previousValue ||
-                changes.hoverable && changes.hoverable.currentValue !== changes.hoverable.previousValue ||
+            if (changes.hoverable && changes.hoverable.currentValue !== changes.hoverable.previousValue ||
                 changes.pointSize && changes.pointSize.currentValue !== changes.pointSize.previousValue) {
                 this.cdRef.detectChanges();
             }
@@ -81718,13 +81730,13 @@ let SvgContainerComponent = class SvgContainerComponent {
      */
     onPointClick() {
         // Indicate that single click has happened.
-        this.singleClickHappened = true;
+        this._singleClickHappened = true;
         // Assign coordinates
         const x = this.pointXCoordinate + this.pointSize / 2;
         const y = this.pointYCoordinate + this.pointSize / 2;
         // Set timeout, to make sure we cancel it if double-click happens.
         setTimeout(() => {
-            if (this.singleClickHappened) {
+            if (this._singleClickHappened) {
                 this.clickEvent.emit({ x, y });
             }
         }, 250);
@@ -81736,7 +81748,7 @@ let SvgContainerComponent = class SvgContainerComponent {
         // Let's fire double click event
         this.doubleClickEvent.emit({ x: this.pointXCoordinate + this.pointSize / 2, y: this.pointYCoordinate + this.pointSize / 2 });
         // Let's set that double click has happened
-        this.singleClickHappened = false;
+        this._singleClickHappened = false;
     }
     /**
      * Make sure that we don't trigger coordinate change, if we hover point.
@@ -81761,6 +81773,38 @@ let SvgContainerComponent = class SvgContainerComponent {
                 .addTo(`#${id}`)
                 .size('100%', this.height);
         }
+        // Let's set pattern if grid and showGrid is set
+        if (this.showGrid) {
+            this.setGridPattern();
+        }
+    }
+    /**
+     * Does all required pre-requisites and initializes or updates grid pattern.
+     */
+    setGridPattern() {
+        // Let's create the pattern
+        const pattern = this._svg.pattern(this.grid.width, this.grid.height, (addedPattern) => {
+            addedPattern.rect(this.grid.width, this.grid.height).fill('transparent').stroke(this.grid.strokeColor);
+        });
+        // Let's check if we have disabled the grid
+        if (!this.showGrid) {
+            // We have disabled the grid, let's hide grid if it exists
+            if (this._grid) {
+                this._grid.hide();
+            }
+        }
+        else {
+            // Let's create grid, if we haven't created one yet.
+            if (!this._grid) {
+                this._grid = this._svg.rect('100%', '100%').fill(pattern);
+            }
+            else {
+                // Let's show the grid
+                this._grid.show();
+                // Let's update grid fill with the new pattern
+                this._grid.fill(pattern);
+            }
+        }
     }
     /**
      * Retrieves container instance.
@@ -81771,7 +81815,7 @@ let SvgContainerComponent = class SvgContainerComponent {
     }
 };
 SvgContainerComponent.ɵfac = function SvgContainerComponent_Factory(t) { return new (t || SvgContainerComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"])); };
-SvgContainerComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: SvgContainerComponent, selectors: [["svg-container"]], inputs: { height: "height", showGrid: "showGrid", hoverable: "hoverable", pointSize: "pointSize", viewBox: "viewBox", containerId: "containerId" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent", mouseMoveEvent: "mouseMoveEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵNgOnChangesFeature"]], ngContentSelectors: _c0, decls: 3, vars: 4, consts: [[1, "svg-container", 3, "id", "mousemove", "mouseenter", "mouseleave"], ["class", "svg-hover-point", 3, "width", "height", "left", "top", "dblclick", "click", "mousemove", 4, "ngIf"], [1, "svg-hover-point", 3, "dblclick", "click", "mousemove"]], template: function SvgContainerComponent_Template(rf, ctx) { if (rf & 1) {
+SvgContainerComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: SvgContainerComponent, selectors: [["svg-container"]], inputs: { height: "height", showGrid: "showGrid", grid: "grid", hoverable: "hoverable", pointSize: "pointSize", viewBox: "viewBox", containerId: "containerId" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent", mouseMoveEvent: "mouseMoveEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵNgOnChangesFeature"]], ngContentSelectors: _c0, decls: 3, vars: 2, consts: [[1, "svg-container", 3, "id", "mousemove", "mouseenter", "mouseleave"], ["class", "svg-hover-point", 3, "width", "height", "left", "top", "dblclick", "click", "mousemove", 4, "ngIf"], [1, "svg-hover-point", 3, "dblclick", "click", "mousemove"]], template: function SvgContainerComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵprojectionDef"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener() { return ctx.mouseInContainer = true; })("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener($event) { ctx.adjustPointPosition($event); return ctx.adjustMouseMovePosition($event); })("mouseenter", function SvgContainerComponent_Template_div_mouseenter_0_listener($event) { ctx.mouseInContainer = true; return ctx.mouseOverEvent.emit($event); })("mouseleave", function SvgContainerComponent_Template_div_mouseleave_0_listener($event) { ctx.mouseInContainer = false; return ctx.mouseOutEvent.emit($event); });
@@ -81779,11 +81823,10 @@ SvgContainerComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵde
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵprojection"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵclassProp"]("svg-grid", ctx.showGrid);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("id", ctx.containerId);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.hoverable && ctx.mouseInContainer);
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["NgIf"]], styles: [".svg-grid[_ngcontent-%COMP%]{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE3MkE0MEYzQURBQTExREZBN0MxQjk4RDBDM0ZCMzk1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE3MkE0MEY0QURBQTExREZBN0MxQjk4RDBDM0ZCMzk1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTcyQTQwRjFBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTcyQTQwRjJBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6babduAAAAIVBMVEX///9kZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRPODiSAAAAC3RSTlMAMDM8Y5zDzM/Y84lH4NsAAAApSURBVCjPY2CAAcYABkzAnDAqSFdBJRhQaYIzGcphoHI5nDkadINKEAAryRsp9gQvagAAAABJRU5ErkJggg==)}.svg-hover-point[_ngcontent-%COMP%]{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container[_ngcontent-%COMP%]{position:relative}"] });
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["NgIf"]], styles: [".svg-hover-point[_ngcontent-%COMP%]{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container[_ngcontent-%COMP%]{position:relative}"] });
 SvgContainerComponent.ctorParameters = () => [
     { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] }
 ];
@@ -81796,6 +81839,9 @@ Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
 ], SvgContainerComponent.prototype, "showGrid", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+], SvgContainerComponent.prototype, "grid", void 0);
 Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
 ], SvgContainerComponent.prototype, "hoverable", void 0);
@@ -83046,12 +83092,14 @@ NgxSvgModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjec
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
                 selector: 'svg-container',
-                template: "<div [id]=\"containerId\" class=\"svg-container\" [class.svg-grid]=\"showGrid\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event); adjustMouseMovePosition($event);\" (mouseenter)=\"mouseInContainer = true; mouseOverEvent.emit($event);\"\n  (mouseleave)=\"mouseInContainer = false; mouseOutEvent.emit($event);\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover();\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  <ng-content></ng-content>\n</div>",
-                styles: [".svg-grid{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE3MkE0MEYzQURBQTExREZBN0MxQjk4RDBDM0ZCMzk1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE3MkE0MEY0QURBQTExREZBN0MxQjk4RDBDM0ZCMzk1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTcyQTQwRjFBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTcyQTQwRjJBREFBMTFERkE3QzFCOThEMEMzRkIzOTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6babduAAAAIVBMVEX///9kZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRPODiSAAAAC3RSTlMAMDM8Y5zDzM/Y84lH4NsAAAApSURBVCjPY2CAAcYABkzAnDAqSFdBJRhQaYIzGcphoHI5nDkadINKEAAryRsp9gQvagAAAABJRU5ErkJggg==)}.svg-hover-point{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container{position:relative}"]
+                template: "<div [id]=\"containerId\" class=\"svg-container\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event); adjustMouseMovePosition($event);\" (mouseenter)=\"mouseInContainer = true; mouseOverEvent.emit($event);\"\n  (mouseleave)=\"mouseInContainer = false; mouseOutEvent.emit($event);\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover();\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  \n  <ng-content></ng-content>\n</div>",
+                styles: [".svg-hover-point{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container{position:relative}"]
             }]
     }], function () { return [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] }]; }, { height: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
         }], showGrid: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+        }], grid: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
         }], hoverable: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
