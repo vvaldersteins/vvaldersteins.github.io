@@ -110999,37 +110999,37 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
 
     function SvgContainerComponent_div_1_Template(rf, ctx) {
       if (rf & 1) {
-        var _r3859 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+        var _r296 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
 
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 2);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() {
-          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859);
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296);
 
-          var ctx_r3858 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+          var ctx_r295 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-          return ctx_r3858.onPointDoubleClick();
+          return ctx_r295.onPointDoubleClick();
         })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() {
-          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859);
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296);
 
-          var ctx_r3860 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+          var ctx_r297 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-          return ctx_r3860.onPointClick();
+          return ctx_r297.onPointClick();
         })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() {
-          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859);
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296);
 
-          var ctx_r3861 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+          var ctx_r298 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-          return ctx_r3861.onPointHover();
+          return ctx_r298.onPointHover();
         });
 
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
       }
 
       if (rf & 2) {
-        var ctx_r3857 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+        var ctx_r294 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r3857.pointSize, "px")("height", ctx_r3857.pointSize, "px")("left", ctx_r3857.pointXCoordinate, "px")("top", ctx_r3857.pointYCoordinate, "px");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r294.pointSize, "px")("height", ctx_r294.pointSize, "px")("left", ctx_r294.pointXCoordinate, "px")("top", ctx_r294.pointYCoordinate, "px");
       }
     }
 
@@ -113173,8 +113173,10 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         value: function updateText() {
           this._text.text(this.text) // Update the text for the element
           .fill(this.color) // Update the color of the text
-          .size(this.size) // Update the size of the text
-          .move(this.x, this.y); // Update the location of the text
+          .font({
+            size: this.size // Update the size of the text
+
+          }).move(this.x, this.y); // Update the location of the text
 
         }
         /**
@@ -113188,8 +113190,10 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
 
           this._text = this._svgContainer.getContainer().text(this.text) // Set the text for the element
           .fill(this.color) // Set the color of the text
-          .size(this.size) // Set the size of the text
-          .move(this.x, this.y) // Set the location of the text
+          .font({
+            size: this.size // Set the size of the text
+
+          }).move(this.x, this.y) // Set the location of the text
           .on('click', function (evt) {
             return _this159.clickEvent.emit(evt);
           }) // Assign click event

@@ -81606,13 +81606,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function SvgContainerComponent_div_1_Template(rf, ctx) { if (rf & 1) {
-    const _r3859 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    const _r296 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859); const ctx_r3858 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r3858.onPointDoubleClick(); })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859); const ctx_r3860 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r3860.onPointClick(); })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r3859); const ctx_r3861 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r3861.onPointHover(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296); const ctx_r295 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r295.onPointDoubleClick(); })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296); const ctx_r297 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r297.onPointClick(); })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296); const ctx_r298 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r298.onPointHover(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
-    const ctx_r3857 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r3857.pointSize, "px")("height", ctx_r3857.pointSize, "px")("left", ctx_r3857.pointXCoordinate, "px")("top", ctx_r3857.pointYCoordinate, "px");
+    const ctx_r294 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r294.pointSize, "px")("height", ctx_r294.pointSize, "px")("left", ctx_r294.pointXCoordinate, "px")("top", ctx_r294.pointYCoordinate, "px");
 } }
 const _c0 = ["*"];
 let SvgContainerComponent = class SvgContainerComponent {
@@ -83003,7 +83003,9 @@ let SvgTextDirective = class SvgTextDirective {
         this._text
             .text(this.text) // Update the text for the element
             .fill(this.color) // Update the color of the text
-            .size(this.size) // Update the size of the text
+            .font({
+            size: this.size // Update the size of the text
+        })
             .move(this.x, this.y); // Update the location of the text
     }
     /**
@@ -83013,7 +83015,9 @@ let SvgTextDirective = class SvgTextDirective {
         this._text = this._svgContainer.getContainer()
             .text(this.text) // Set the text for the element
             .fill(this.color) // Set the color of the text
-            .size(this.size) // Set the size of the text
+            .font({
+            size: this.size // Set the size of the text
+        })
             .move(this.x, this.y) // Set the location of the text
             .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
             .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
