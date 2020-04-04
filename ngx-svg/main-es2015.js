@@ -225,7 +225,7 @@ HeaderComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, " ngx-svg ");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "small", 2);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "i");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "v1.0.2");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "v1.1.0");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -338,7 +338,7 @@ function CircleComponent_svg_circle_8_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](0, "svg-circle", 13);
 } if (rf & 2) {
     const circle_r17 = ctx.$implicit;
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("radius", circle_r17.radius)("color", circle_r17.color)("x", circle_r17.x)("y", circle_r17.y);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("diameter", circle_r17.diameter)("color", circle_r17.color)("x", circle_r17.x)("y", circle_r17.y);
 } }
 function CircleComponent_ng_container_27_tr_1_Template(rf, ctx) { if (rf & 1) {
     const _r22 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
@@ -350,7 +350,7 @@ function CircleComponent_ng_container_27_tr_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "td");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "input", 16);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function CircleComponent_ng_container_27_tr_1_Template_input_ngModelChange_5_listener($event) { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r22); const circle_r19 = ctx.$implicit; return circle_r19.radius = $event; });
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function CircleComponent_ng_container_27_tr_1_Template_input_ngModelChange_5_listener($event) { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r22); const circle_r19 = ctx.$implicit; return circle_r19.diameter = $event; });
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "td");
@@ -381,7 +381,7 @@ function CircleComponent_ng_container_27_tr_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](3);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](index_r20 + 1);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", circle_r19.radius);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", circle_r19.diameter);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", circle_r19.color);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
@@ -414,12 +414,12 @@ class CircleComponent {
          * Globally used variables within the component.
          */
         this.circles = [{
-                radius: 45,
+                diameter: 45,
                 color: 'rgba(125, 125, 32, 0.5)',
                 x: 20,
                 y: 30
             }, {
-                radius: 30,
+                diameter: 30,
                 color: 'rgba(12, 32, 222, 0.7)',
                 x: 70,
                 y: 30
@@ -430,7 +430,7 @@ class CircleComponent {
      */
     addNew() {
         this.circles.push({
-            radius: 0,
+            diameter: 0,
             color: '#000',
             x: 0,
             y: 0
@@ -441,7 +441,7 @@ class CircleComponent {
      * @returns Height of the container.
      */
     getHeight() {
-        return Math.max.apply(Math, this.circles.map(el => el.radius * 2 + el.y)) + 20;
+        return Math.max.apply(Math, this.circles.map(el => el.diameter + el.y)) + 30;
     }
     /**
      * Removes specific circle element.
@@ -452,7 +452,7 @@ class CircleComponent {
     }
 }
 CircleComponent.ɵfac = function CircleComponent_Factory(t) { return new (t || CircleComponent)(); };
-CircleComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: CircleComponent, selectors: [["ng-component"]], decls: 34, vars: 4, consts: [[1, "jumbotron", "jumbotron-fluid"], [1, "container"], [1, "display-4", "text-center"], [1, "container-fluid"], [1, "row", "no-gutters"], [1, "col-12"], ["containerId", "circle", 3, "height"], [3, "radius", "color", "x", "y", 4, "ngFor", "ngForOf"], [1, "table-responsive"], [1, "table"], [4, "ngIf"], ["colspan", "6"], [1, "btn", "btn-success", "float-right", 3, "click"], [3, "radius", "color", "x", "y"], [4, "ngFor", "ngForOf"], [1, "align-middle"], ["type", "number", 1, "form-control", 3, "ngModel", "ngModelChange"], ["type", "string", 1, "form-control", 3, "ngModel", "ngModelChange"], [1, "btn", "btn-danger", 3, "click"], ["colspan", "6", 1, "text-center"]], template: function CircleComponent_Template(rf, ctx) { if (rf & 1) {
+CircleComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: CircleComponent, selectors: [["ng-component"]], decls: 34, vars: 4, consts: [[1, "jumbotron", "jumbotron-fluid"], [1, "container"], [1, "display-4", "text-center"], [1, "container-fluid"], [1, "row", "no-gutters"], [1, "col-12"], ["containerId", "circle", 3, "height"], [3, "diameter", "color", "x", "y", 4, "ngFor", "ngForOf"], [1, "table-responsive"], [1, "table"], [4, "ngIf"], ["colspan", "6"], [1, "btn", "btn-success", "float-right", 3, "click"], [3, "diameter", "color", "x", "y"], [4, "ngFor", "ngForOf"], [1, "align-middle"], ["type", "number", 1, "form-control", 3, "ngModel", "ngModelChange"], ["type", "string", 1, "form-control", 3, "ngModel", "ngModelChange"], [1, "btn", "btn-danger", 3, "click"], ["colspan", "6", 1, "text-center"]], template: function CircleComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "h1", 2);
@@ -476,7 +476,7 @@ CircleComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](15, "ID");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "th");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, "Radius");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, "Diameter");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](18, "th");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](19, "Color");
@@ -2183,7 +2183,7 @@ HomeComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComp
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](820, "td");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](821, "radius");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](821, "diameter");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](822, "td");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](823, "Input parameter ");
@@ -2192,7 +2192,7 @@ HomeComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComp
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](826, "td");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](827, "Radius of the circle.");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](827, "Diameter of the circle.");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](828, "td");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](829, "b");
@@ -6206,7 +6206,7 @@ class TextComponent {
      * @returns Height of the container.
      */
     getHeight() {
-        return Math.max.apply(Math, this.texts.map(el => el.y)) + 20;
+        return Math.max.apply(Math, this.texts.map(el => el.y + el.size)) + 20;
     }
     /**
      * Removes specific text element.

@@ -81606,13 +81606,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function SvgContainerComponent_div_1_Template(rf, ctx) { if (rf & 1) {
-    const _r296 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+    const _r2 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296); const ctx_r295 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r295.onPointDoubleClick(); })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296); const ctx_r297 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r297.onPointClick(); })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296); const ctx_r298 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r298.onPointHover(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r2); const ctx_r1 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r1.onPointDoubleClick(); })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r2); const ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r3.onPointClick(); })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r2); const ctx_r4 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r4.onPointHover(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
-    const ctx_r294 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r294.pointSize, "px")("height", ctx_r294.pointSize, "px")("left", ctx_r294.pointXCoordinate, "px")("top", ctx_r294.pointYCoordinate, "px");
+    const ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r0.pointSize, "px")("height", ctx_r0.pointSize, "px")("left", ctx_r0.pointXCoordinate, "px")("top", ctx_r0.pointYCoordinate, "px");
 } }
 const _c0 = ["*"];
 let SvgContainerComponent = class SvgContainerComponent {
@@ -81623,8 +81623,8 @@ let SvgContainerComponent = class SvgContainerComponent {
      */
     constructor(cdRef) {
         this.cdRef = cdRef;
-        this._triggerCoordinateChange = false;
         this.mouseInContainer = false;
+        this._triggerCoordinateChange = false;
         this.height = 200; // Height of the container.
         this.showGrid = false; // Indicator if grid image should be shown in the background of svg container.
         this.grid = {
@@ -81653,21 +81653,17 @@ let SvgContainerComponent = class SvgContainerComponent {
         if (this._svg) {
             // Check if viewbox has changed
             if (changes.viewBox && changes.viewBox.currentValue !== changes.viewBox.previousValue) {
-                // Check if we are still using viewbox
-                if (changes.viewBox.currentValue.length === 4) {
-                    // Get viewbox value
-                    const viewbox = changes.viewBox.currentValue;
-                    // Set viewbox
-                    this._svg.viewbox(viewbox[0], viewbox[1], viewbox[2], viewbox[3]);
-                }
-                else {
-                    // Remove viewbox
-                    this._svg.viewbox();
-                }
+                // Let's update viewbox value
+                this.viewBox = changes.viewBox.currentValue;
+                // Let's update viewbox
+                this.updateViewbox();
             }
             // Let's update the height
             if (changes.height && changes.height.currentValue !== changes.height.previousValue) {
-                this._svg.size('100%', changes.height.currentValue);
+                // Update height
+                this.height = changes.height.currentValue;
+                // Update height of the svg container
+                this._svg.size('100%', this.height);
             }
             // Let's update pattern in case grid was changed
             if (changes.showGrid || changes.grid) {
@@ -81680,6 +81676,10 @@ let SvgContainerComponent = class SvgContainerComponent {
             // Check if any other input variables have changed
             if (changes.hoverable && changes.hoverable.currentValue !== changes.hoverable.previousValue ||
                 changes.pointSize && changes.pointSize.currentValue !== changes.pointSize.previousValue) {
+                // Update values
+                this.hoverable = changes.hoverable ? changes.hoverable.currentValue : this.hoverable;
+                this.pointSize = changes.pointSize ? changes.pointSize.currentValue : this.pointSize;
+                // Let's refresh the view
                 this.cdRef.detectChanges();
             }
         }
@@ -81689,6 +81689,13 @@ let SvgContainerComponent = class SvgContainerComponent {
      */
     ngAfterViewInit() {
         this.setContainer(this.containerId);
+    }
+    /**
+     * Retrieves container instance.
+     * @returns SVG Container instance.
+     */
+    getContainer() {
+        return this._svg;
     }
     /**
      * Does all required pre-requisites and adjusts hoverable point position.
@@ -81712,7 +81719,7 @@ let SvgContainerComponent = class SvgContainerComponent {
      * @param event - Mouse event handler from the DOM.
      */
     adjustMouseMovePosition(event) {
-        if ((this.hoverable && this._triggerCoordinateChange)) {
+        if (this.hoverable && this._triggerCoordinateChange) {
             this.mouseMoveEvent.emit({
                 x: this.pointXCoordinate + this.pointSize / 2,
                 y: this.pointYCoordinate + this.pointSize / 2
@@ -81746,7 +81753,10 @@ let SvgContainerComponent = class SvgContainerComponent {
      */
     onPointDoubleClick() {
         // Let's fire double click event
-        this.doubleClickEvent.emit({ x: this.pointXCoordinate + this.pointSize / 2, y: this.pointYCoordinate + this.pointSize / 2 });
+        this.doubleClickEvent.emit({
+            x: this.pointXCoordinate + this.pointSize / 2,
+            y: this.pointYCoordinate + this.pointSize / 2
+        });
         // Let's set that double click has happened
         this._singleClickHappened = false;
     }
@@ -81755,6 +81765,20 @@ let SvgContainerComponent = class SvgContainerComponent {
      */
     onPointHover() {
         this._triggerCoordinateChange = false;
+    }
+    /**
+     * Does all required pre-requisites and updates the viewbox of the svg container.
+     */
+    updateViewbox() {
+        // Check if we are still using viewbox
+        if (this.viewBox.length === 4) {
+            // Set viewbox
+            this._svg.viewbox(this.viewBox[0], this.viewBox[1], this.viewBox[2], this.viewBox[3]);
+        }
+        else {
+            // Remove viewbox
+            this._svg.viewbox();
+        }
     }
     /**
      * Sets a container instance.
@@ -81782,43 +81806,37 @@ let SvgContainerComponent = class SvgContainerComponent {
      * Does all required pre-requisites and initializes or updates grid pattern.
      */
     setGridPattern() {
-        // Let's create the pattern
-        const pattern = this._svg.pattern(this.grid.width, this.grid.height, (addedPattern) => {
-            addedPattern.rect(this.grid.width, this.grid.height).fill('transparent').stroke(this.grid.strokeColor);
-        });
-        // Let's check if we have disabled the grid
-        if (!this.showGrid) {
-            // We have disabled the grid, let's hide grid if it exists
-            if (this._grid) {
-                this._grid.hide();
-            }
+        // Let's remove old pattern if we have created one
+        if (this._pattern) {
+            this._pattern.remove();
         }
-        else {
-            // Let's create grid, if we haven't created one yet.
-            if (!this._grid) {
-                this._grid = this._svg.rect('100%', '100%').fill(pattern);
-            }
-            else {
-                // Let's show the grid
-                this._grid.show();
-                // Let's update grid fill with the new pattern
-                this._grid.fill(pattern);
-            }
+        // Let's remove old grid if we have created one
+        if (this._grid) {
+            this._grid.remove();
         }
-    }
-    /**
-     * Retrieves container instance.
-     * @returns SVG Container instance.
-     */
-    getContainer() {
-        return this._svg;
+        // Let's check if we want to show grid
+        if (this.showGrid) {
+            // Let's create the pattern
+            this._pattern = this._svg
+                .pattern(this.grid.width, this.grid.height, (addedPattern) => {
+                addedPattern
+                    .rect(this.grid.width, this.grid.height)
+                    .fill('transparent')
+                    .stroke(this.grid.strokeColor);
+            });
+            // Let's create grid
+            this._grid = this._svg
+                .rect()
+                .size('100%', '100%')
+                .fill(this._pattern);
+        }
     }
 };
 SvgContainerComponent.ɵfac = function SvgContainerComponent_Factory(t) { return new (t || SvgContainerComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"])); };
 SvgContainerComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: SvgContainerComponent, selectors: [["svg-container"]], inputs: { height: "height", showGrid: "showGrid", grid: "grid", hoverable: "hoverable", pointSize: "pointSize", viewBox: "viewBox", containerId: "containerId" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent", mouseMoveEvent: "mouseMoveEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵNgOnChangesFeature"]], ngContentSelectors: _c0, decls: 3, vars: 2, consts: [[1, "svg-container", 3, "id", "mousemove", "mouseenter", "mouseleave"], ["class", "svg-hover-point", 3, "width", "height", "left", "top", "dblclick", "click", "mousemove", 4, "ngIf"], [1, "svg-hover-point", 3, "dblclick", "click", "mousemove"]], template: function SvgContainerComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵprojectionDef"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener() { return ctx.mouseInContainer = true; })("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener($event) { ctx.adjustPointPosition($event); return ctx.adjustMouseMovePosition($event); })("mouseenter", function SvgContainerComponent_Template_div_mouseenter_0_listener($event) { ctx.mouseInContainer = true; return ctx.mouseOverEvent.emit($event); })("mouseleave", function SvgContainerComponent_Template_div_mouseleave_0_listener($event) { ctx.mouseInContainer = false; return ctx.mouseOutEvent.emit($event); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener($event) { ctx.mouseInContainer = true; ctx.adjustPointPosition($event); return ctx.adjustMouseMovePosition($event); })("mouseenter", function SvgContainerComponent_Template_div_mouseenter_0_listener($event) { ctx.mouseInContainer = true; return ctx.mouseOverEvent.emit($event); })("mouseleave", function SvgContainerComponent_Template_div_mouseleave_0_listener($event) { ctx.mouseInContainer = false; return ctx.mouseOutEvent.emit($event); });
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, SvgContainerComponent_div_1_Template, 1, 8, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵprojection"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -81896,6 +81914,12 @@ let SvgRectDirective = class SvgRectDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._rect.remove();
+    }
+    /**
      * Is called when changes are made to the rect object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -81908,7 +81932,7 @@ let SvgRectDirective = class SvgRectDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -81931,10 +81955,10 @@ let SvgRectDirective = class SvgRectDirective {
             .rect(this.width, this.height) // Set height and width of the rect
             .fill(this.color) // Set fill color
             .move(this.x, this.y) // Set coordinates
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the rect
         this.addRemoveClasses(this.classes);
     }
@@ -81954,12 +81978,6 @@ let SvgRectDirective = class SvgRectDirective {
             this._rect
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._rect.remove();
     }
 };
 SvgRectDirective.ɵfac = function SvgRectDirective_Factory(t) { return new (t || SvgRectDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -82023,8 +82041,15 @@ let SvgCircleDirective = class SvgCircleDirective {
     ngAfterViewChecked() {
         // Check if container is created and no circle object is created
         if (this._svgContainer.getContainer() && !this._circle) {
+            // If so, let's create a circle
             this.createCircle();
         }
+    }
+    /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._circle.remove();
     }
     /**
      * Is called when changes are made to the circle object.
@@ -82037,9 +82062,9 @@ let SvgCircleDirective = class SvgCircleDirective {
             // Check if classes were changed
             if (changes.classes && changes.classes.currentValue !== changes.classes.previousValue) {
                 // Get classes that needs to be removed
-                const classesToRemove = changes.classes.previousValue.filter(previousClass => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
+                const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter(previousClass => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -82050,24 +82075,24 @@ let SvgCircleDirective = class SvgCircleDirective {
      */
     updateCircle() {
         this._circle
-            .radius(this.radius) // Set the radius
+            .size(this.diameter) // Set the diameter (twice the radius)
             .fill(this.color) // Set the fill color
-            .attr('cx', +this.x + +this.radius) // Set x position
-            .attr('cy', +this.y + +this.radius); // Set y position
+            .attr('cx', +this.x + +this.diameter / 2) // Set x position
+            .attr('cy', +this.y + +this.diameter / 2); // Set y position
     }
     /**
      * Create circle object within the SVG container.
      */
     createCircle() {
         this._circle = this._svgContainer.getContainer()
-            .circle(this.radius) // Create the circle with radius
+            .circle(this.diameter) // Create the circle with diameter (twice the radius)
             .fill(this.color) // Set the fill color
-            .attr('cx', +this.x + +this.radius) // Set x position
-            .attr('cy', +this.y + +this.radius) // Set y position
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .attr('cx', +this.x + +this.diameter / 2) // Set x position
+            .attr('cy', +this.y + +this.diameter / 2) // Set y position
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the circle
         this.addRemoveClasses(this.classes);
     }
@@ -82088,21 +82113,15 @@ let SvgCircleDirective = class SvgCircleDirective {
                 .addClass(classToAdd);
         }
     }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._circle.remove();
-    }
 };
 SvgCircleDirective.ɵfac = function SvgCircleDirective_Factory(t) { return new (t || SvgCircleDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
-SvgCircleDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineDirective"]({ type: SvgCircleDirective, selectors: [["svg-circle"]], inputs: { color: "color", x: "x", y: "y", classes: "classes", radius: "radius" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵNgOnChangesFeature"]] });
+SvgCircleDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineDirective"]({ type: SvgCircleDirective, selectors: [["svg-circle"]], inputs: { color: "color", x: "x", y: "y", classes: "classes", diameter: "diameter" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵNgOnChangesFeature"]] });
 SvgCircleDirective.ctorParameters = () => [
     { type: SvgContainerComponent }
 ];
 Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
-], SvgCircleDirective.prototype, "radius", void 0);
+], SvgCircleDirective.prototype, "diameter", void 0);
 Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
 ], SvgCircleDirective.prototype, "color", void 0);
@@ -82157,6 +82176,12 @@ let SvgEllipseDirective = class SvgEllipseDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._ellipse.remove();
+    }
+    /**
      * Is called when changes are made to the ellipse object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -82169,7 +82194,7 @@ let SvgEllipseDirective = class SvgEllipseDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -82182,8 +82207,8 @@ let SvgEllipseDirective = class SvgEllipseDirective {
         this._ellipse
             .size(this.width, this.height) // Update the width and height
             .fill(this.color) // Update the color
-            .attr('cx', +this.x + +this.width) // Set x position
-            .attr('cy', +this.y + +this.height); // Set y position
+            .attr('cx', +this.x + +this.width / 2) // Set x position
+            .attr('cy', +this.y + +this.height / 2); // Set y position
     }
     /**
      * Create ellipse object within the SVG container.
@@ -82192,12 +82217,12 @@ let SvgEllipseDirective = class SvgEllipseDirective {
         this._ellipse = this._svgContainer.getContainer()
             .ellipse(this.width, this.height) // Set height and width of the ellipse
             .fill(this.color) // Set fill color
-            .attr('cx', +this.x + +this.width) // Set x position
-            .attr('cy', +this.y + +this.height) // Set y position
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .attr('cx', +this.x + +this.width / 2) // Set x position
+            .attr('cy', +this.y + +this.height / 2) // Set y position
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the ellipse
         this.addRemoveClasses(this.classes);
     }
@@ -82217,12 +82242,6 @@ let SvgEllipseDirective = class SvgEllipseDirective {
             this._ellipse
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._ellipse.remove();
     }
 };
 SvgEllipseDirective.ɵfac = function SvgEllipseDirective_Factory(t) { return new (t || SvgEllipseDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -82292,6 +82311,12 @@ let SvgLineDirective = class SvgLineDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._line.remove();
+    }
+    /**
      * Is called when changes are made to the line object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -82304,7 +82329,7 @@ let SvgLineDirective = class SvgLineDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -82325,10 +82350,10 @@ let SvgLineDirective = class SvgLineDirective {
         this._line = this._svgContainer.getContainer()
             .line(this.x0, this.y0, this.x1, this.y1) // Create the line at specific position
             .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the line
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the line
         this.addRemoveClasses(this.classes);
     }
@@ -82348,12 +82373,6 @@ let SvgLineDirective = class SvgLineDirective {
             this._line
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._line.remove();
     }
 };
 SvgLineDirective.ɵfac = function SvgLineDirective_Factory(t) { return new (t || SvgLineDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -82423,6 +82442,12 @@ let SvgPolylineDirective = class SvgPolylineDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._polyline.remove();
+    }
+    /**
      * Is called when changes are made to the polyline object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -82435,7 +82460,7 @@ let SvgPolylineDirective = class SvgPolylineDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -82458,10 +82483,10 @@ let SvgPolylineDirective = class SvgPolylineDirective {
             .polyline(this.points) // Create the polyline object
             .fill(this.fill) // Fill color of the polyline
             .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the polyline
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the polyline
         this.addRemoveClasses(this.classes);
     }
@@ -82481,12 +82506,6 @@ let SvgPolylineDirective = class SvgPolylineDirective {
             this._polyline
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._polyline.remove();
     }
 };
 SvgPolylineDirective.ɵfac = function SvgPolylineDirective_Factory(t) { return new (t || SvgPolylineDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -82550,6 +82569,12 @@ let SvgPolygonDirective = class SvgPolygonDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._polygon.remove();
+    }
+    /**
      * Is called when changes are made to the polygon object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -82562,7 +82587,7 @@ let SvgPolygonDirective = class SvgPolygonDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -82585,10 +82610,10 @@ let SvgPolygonDirective = class SvgPolygonDirective {
             .polygon(this.points) // Create the polygon object
             .fill(this.fill) // Fill color of the polygon
             .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the polygon
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the polygon
         this.addRemoveClasses(this.classes);
     }
@@ -82608,12 +82633,6 @@ let SvgPolygonDirective = class SvgPolygonDirective {
             this._polygon
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._polygon.remove();
     }
 };
 SvgPolygonDirective.ɵfac = function SvgPolygonDirective_Factory(t) { return new (t || SvgPolygonDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -82679,6 +82698,12 @@ let SvgImageDirective = class SvgImageDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._image.remove();
+    }
+    /**
      * Is called when changes are made to the image object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -82702,7 +82727,7 @@ let SvgImageDirective = class SvgImageDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -82735,10 +82760,10 @@ let SvgImageDirective = class SvgImageDirective {
             .load(this.imageUrl) // Load image
             .size(this.width, this.height) // Assign image size
             .move(this.x, this.y) // Assign position
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the image
         this.addRemoveClasses(this.classes);
     }
@@ -82758,12 +82783,6 @@ let SvgImageDirective = class SvgImageDirective {
             this._image
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._image.remove();
     }
 };
 SvgImageDirective.ɵfac = function SvgImageDirective_Factory(t) { return new (t || SvgImageDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -82837,6 +82856,12 @@ let SvgPathDirective = class SvgPathDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._path.remove();
+    }
+    /**
      * Is called when changes are made to the path object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -82849,7 +82874,7 @@ let SvgPathDirective = class SvgPathDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -82862,7 +82887,7 @@ let SvgPathDirective = class SvgPathDirective {
         this._path
             .plot(this.path) // Update the path for the element
             .stroke({ color: this.borderColor, width: this.borderSize }) // Update the border for the
-            .fill(this.fill === '' ? 'rgba(0, 0, 0, 0)' : this.fill) // Update fill of the path
+            .fill(this.fill || 'rgba(0, 0, 0, 0)') // Update fill of the path
             .move(this.x, this.y); // Update the location of the path
     }
     /**
@@ -82872,12 +82897,12 @@ let SvgPathDirective = class SvgPathDirective {
         this._path = this._svgContainer.getContainer()
             .path(this.path) // Set the path for the element
             .stroke({ color: this.borderColor, width: this.borderSize }) // Set the border for the path
-            .fill(this.fill === '' ? 'rgba(0, 0, 0, 0)' : this.fill) // Set fill of the path
+            .fill(this.fill || 'rgba(0, 0, 0, 0)') // Set fill of the path
             .move(this.x, this.y) // Set the location of the path
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the path
         this.addRemoveClasses(this.classes);
     }
@@ -82897,12 +82922,6 @@ let SvgPathDirective = class SvgPathDirective {
             this._path
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._path.remove();
     }
 };
 SvgPathDirective.ɵfac = function SvgPathDirective_Factory(t) { return new (t || SvgPathDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -82978,6 +82997,12 @@ let SvgTextDirective = class SvgTextDirective {
         }
     }
     /**
+     * Does all required pre-requisites before destroying the component.
+     */
+    ngOnDestroy() {
+        this._text.remove();
+    }
+    /**
      * Is called when changes are made to the text object.
      * @param changes - Angular Simple Changes object containing all of the changes.
      */
@@ -82990,7 +83015,7 @@ let SvgTextDirective = class SvgTextDirective {
                 // Get classes that needs to be removed
                 const classesToRemove = changes.classes.previousValue.filter((previousClass) => !changes.classes.currentValue.some((currentClass) => currentClass === previousClass));
                 // Get classes that needs to be added
-                const classesToAdd = changes.classes.currentValue.filter((previousClass) => !changes.classes.previousValue.some((currentClass) => currentClass === previousClass));
+                const classesToAdd = changes.classes.currentValue.filter((currentClass) => !changes.classes.previousValue.some((previousClass) => currentClass === previousClass));
                 // Add and remove classes
                 this.addRemoveClasses(classesToAdd, classesToRemove);
             }
@@ -83019,10 +83044,10 @@ let SvgTextDirective = class SvgTextDirective {
             size: this.size // Set the size of the text
         })
             .move(this.x, this.y) // Set the location of the text
-            .on('click', evt => this.clickEvent.emit(evt)) // Assign click event
-            .on('dblclick', evt => this.doubleClickEvent.emit(evt)) // Assign double click event
-            .on('mouseover', evt => this.mouseOverEvent.emit(evt)) // Assign mouse over event
-            .on('mouseout', evt => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+            .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
+            .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
+            .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
+            .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
         // Add classes to the text
         this.addRemoveClasses(this.classes);
     }
@@ -83042,12 +83067,6 @@ let SvgTextDirective = class SvgTextDirective {
             this._text
                 .addClass(classToAdd);
         }
-    }
-    /**
-     * Does all required pre-requisites before destroying the component.
-     */
-    ngOnDestroy() {
-        this._text.remove();
     }
 };
 SvgTextDirective.ɵfac = function SvgTextDirective_Factory(t) { return new (t || SvgTextDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](SvgContainerComponent)); };
@@ -83096,7 +83115,7 @@ NgxSvgModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjec
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
                 selector: 'svg-container',
-                template: "<div [id]=\"containerId\" class=\"svg-container\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event); adjustMouseMovePosition($event);\" (mouseenter)=\"mouseInContainer = true; mouseOverEvent.emit($event);\"\n  (mouseleave)=\"mouseInContainer = false; mouseOutEvent.emit($event);\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover();\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  \n  <ng-content></ng-content>\n</div>",
+                template: "<div [id]=\"containerId\" class=\"svg-container\"\n  (mousemove)=\"mouseInContainer = true; adjustPointPosition($event); adjustMouseMovePosition($event)\"\n  (mouseenter)=\"mouseInContainer = true; mouseOverEvent.emit($event)\"\n  (mouseleave)=\"mouseInContainer = false; mouseOutEvent.emit($event)\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\"\n    (click)=\"onPointClick()\" (mousemove)=\"onPointHover()\"\n    [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"\n    *ngIf=\"hoverable && mouseInContainer\"></div>\n  \n  <ng-content></ng-content>\n</div>",
                 styles: [".svg-hover-point{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container{position:relative}"]
             }]
     }], function () { return [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] }]; }, { height: [{
@@ -83171,7 +83190,7 @@ NgxSvgModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjec
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
         }], mouseOutEvent: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
-        }], radius: [{
+        }], diameter: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
         }] }); })();
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](SvgEllipseDirective, [{
@@ -93819,14 +93838,14 @@ function not(pred, thisArg) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pipe", function() { return pipe; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pipeFromArray", function() { return pipeFromArray; });
-/* harmony import */ var _noop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./noop */ "./node_modules/rxjs/_esm2015/internal/util/noop.js");
+/* harmony import */ var _identity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./identity */ "./node_modules/rxjs/_esm2015/internal/util/identity.js");
 
 function pipe(...fns) {
     return pipeFromArray(fns);
 }
 function pipeFromArray(fns) {
-    if (!fns) {
-        return _noop__WEBPACK_IMPORTED_MODULE_0__["noop"];
+    if (fns.length === 0) {
+        return _identity__WEBPACK_IMPORTED_MODULE_0__["identity"];
     }
     if (fns.length === 1) {
         return fns[0];

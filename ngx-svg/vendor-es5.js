@@ -110999,37 +110999,37 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
 
     function SvgContainerComponent_div_1_Template(rf, ctx) {
       if (rf & 1) {
-        var _r296 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+        var _r2 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
 
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 2);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("dblclick", function SvgContainerComponent_div_1_Template_div_dblclick_0_listener() {
-          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296);
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r2);
 
-          var ctx_r295 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+          var ctx_r1 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-          return ctx_r295.onPointDoubleClick();
+          return ctx_r1.onPointDoubleClick();
         })("click", function SvgContainerComponent_div_1_Template_div_click_0_listener() {
-          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296);
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r2);
 
-          var ctx_r297 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+          var ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-          return ctx_r297.onPointClick();
+          return ctx_r3.onPointClick();
         })("mousemove", function SvgContainerComponent_div_1_Template_div_mousemove_0_listener() {
-          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r296);
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r2);
 
-          var ctx_r298 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+          var ctx_r4 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-          return ctx_r298.onPointHover();
+          return ctx_r4.onPointHover();
         });
 
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
       }
 
       if (rf & 2) {
-        var ctx_r294 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+        var ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r294.pointSize, "px")("height", ctx_r294.pointSize, "px")("left", ctx_r294.pointXCoordinate, "px")("top", ctx_r294.pointYCoordinate, "px");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleProp"]("width", ctx_r0.pointSize, "px")("height", ctx_r0.pointSize, "px")("left", ctx_r0.pointXCoordinate, "px")("top", ctx_r0.pointYCoordinate, "px");
       }
     }
 
@@ -111046,8 +111046,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         _classCallCheck2(this, SvgContainerComponent);
 
         this.cdRef = cdRef;
-        this._triggerCoordinateChange = false;
         this.mouseInContainer = false;
+        this._triggerCoordinateChange = false;
         this.height = 200; // Height of the container.
 
         this.showGrid = false; // Indicator if grid image should be shown in the background of svg container.
@@ -111091,21 +111091,18 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           if (this._svg) {
             // Check if viewbox has changed
             if (changes.viewBox && changes.viewBox.currentValue !== changes.viewBox.previousValue) {
-              // Check if we are still using viewbox
-              if (changes.viewBox.currentValue.length === 4) {
-                // Get viewbox value
-                var viewbox = changes.viewBox.currentValue; // Set viewbox
+              // Let's update viewbox value
+              this.viewBox = changes.viewBox.currentValue; // Let's update viewbox
 
-                this._svg.viewbox(viewbox[0], viewbox[1], viewbox[2], viewbox[3]);
-              } else {
-                // Remove viewbox
-                this._svg.viewbox();
-              }
+              this.updateViewbox();
             } // Let's update the height
 
 
             if (changes.height && changes.height.currentValue !== changes.height.previousValue) {
-              this._svg.size('100%', changes.height.currentValue);
+              // Update height
+              this.height = changes.height.currentValue; // Update height of the svg container
+
+              this._svg.size('100%', this.height);
             } // Let's update pattern in case grid was changed
 
 
@@ -111119,6 +111116,10 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
 
 
             if (changes.hoverable && changes.hoverable.currentValue !== changes.hoverable.previousValue || changes.pointSize && changes.pointSize.currentValue !== changes.pointSize.previousValue) {
+              // Update values
+              this.hoverable = changes.hoverable ? changes.hoverable.currentValue : this.hoverable;
+              this.pointSize = changes.pointSize ? changes.pointSize.currentValue : this.pointSize; // Let's refresh the view
+
               this.cdRef.detectChanges();
             }
           }
@@ -111131,6 +111132,16 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         key: "ngAfterViewInit",
         value: function ngAfterViewInit() {
           this.setContainer(this.containerId);
+        }
+        /**
+         * Retrieves container instance.
+         * @returns SVG Container instance.
+         */
+
+      }, {
+        key: "getContainer",
+        value: function getContainer() {
+          return this._svg;
         }
         /**
          * Does all required pre-requisites and adjusts hoverable point position.
@@ -111223,6 +111234,22 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           this._triggerCoordinateChange = false;
         }
         /**
+         * Does all required pre-requisites and updates the viewbox of the svg container.
+         */
+
+      }, {
+        key: "updateViewbox",
+        value: function updateViewbox() {
+          // Check if we are still using viewbox
+          if (this.viewBox.length === 4) {
+            // Set viewbox
+            this._svg.viewbox(this.viewBox[0], this.viewBox[1], this.viewBox[2], this.viewBox[3]);
+          } else {
+            // Remove viewbox
+            this._svg.viewbox();
+          }
+        }
+        /**
          * Sets a container instance.
          * @param id - ID of the container.
          */
@@ -111251,39 +111278,25 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         value: function setGridPattern() {
           var _this150 = this;
 
-          // Let's create the pattern
-          var pattern = this._svg.pattern(this.grid.width, this.grid.height, function (addedPattern) {
-            addedPattern.rect(_this150.grid.width, _this150.grid.height).fill('transparent').stroke(_this150.grid.strokeColor);
-          }); // Let's check if we have disabled the grid
+          // Let's remove old pattern if we have created one
+          if (this._pattern) {
+            this._pattern.remove();
+          } // Let's remove old grid if we have created one
 
 
-          if (!this.showGrid) {
-            // We have disabled the grid, let's hide grid if it exists
-            if (this._grid) {
-              this._grid.hide();
-            }
-          } else {
-            // Let's create grid, if we haven't created one yet.
-            if (!this._grid) {
-              this._grid = this._svg.rect('100%', '100%').fill(pattern);
-            } else {
-              // Let's show the grid
-              this._grid.show(); // Let's update grid fill with the new pattern
+          if (this._grid) {
+            this._grid.remove();
+          } // Let's check if we want to show grid
 
 
-              this._grid.fill(pattern);
-            }
+          if (this.showGrid) {
+            // Let's create the pattern
+            this._pattern = this._svg.pattern(this.grid.width, this.grid.height, function (addedPattern) {
+              addedPattern.rect(_this150.grid.width, _this150.grid.height).fill('transparent').stroke(_this150.grid.strokeColor);
+            }); // Let's create grid
+
+            this._grid = this._svg.rect().size('100%', '100%').fill(this._pattern);
           }
-        }
-        /**
-         * Retrieves container instance.
-         * @returns SVG Container instance.
-         */
-
-      }, {
-        key: "getContainer",
-        value: function getContainer() {
-          return this._svg;
         }
       }]);
 
@@ -111324,9 +111337,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
 
           _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener() {
-            return ctx.mouseInContainer = true;
-          })("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener($event) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("mousemove", function SvgContainerComponent_Template_div_mousemove_0_listener($event) {
+            ctx.mouseInContainer = true;
             ctx.adjustPointPosition($event);
             return ctx.adjustMouseMovePosition($event);
           })("mouseenter", function SvgContainerComponent_Template_div_mouseenter_0_listener($event) {
@@ -111415,6 +111427,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._rect.remove();
+        }
+        /**
          * Is called when changes are made to the rect object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -111434,8 +111455,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -111527,15 +111548,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             _iterator22.f();
           }
         }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._rect.remove();
-        }
       }]);
 
       return SvgRectDirective;
@@ -111618,8 +111630,18 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         value: function ngAfterViewChecked() {
           // Check if container is created and no circle object is created
           if (this._svgContainer.getContainer() && !this._circle) {
+            // If so, let's create a circle
             this.createCircle();
           }
+        }
+        /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._circle.remove();
         }
         /**
          * Is called when changes are made to the circle object.
@@ -111641,8 +111663,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -111658,10 +111680,10 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
       }, {
         key: "updateCircle",
         value: function updateCircle() {
-          this._circle.radius(this.radius) // Set the radius
+          this._circle.size(this.diameter) // Set the diameter (twice the radius)
           .fill(this.color) // Set the fill color
-          .attr('cx', +this.x + +this.radius) // Set x position
-          .attr('cy', +this.y + +this.radius); // Set y position
+          .attr('cx', +this.x + +this.diameter / 2) // Set x position
+          .attr('cy', +this.y + +this.diameter / 2); // Set y position
 
         }
         /**
@@ -111673,10 +111695,10 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         value: function createCircle() {
           var _this152 = this;
 
-          this._circle = this._svgContainer.getContainer().circle(this.radius) // Create the circle with radius
+          this._circle = this._svgContainer.getContainer().circle(this.diameter) // Create the circle with diameter (twice the radius)
           .fill(this.color) // Set the fill color
-          .attr('cx', +this.x + +this.radius) // Set x position
-          .attr('cy', +this.y + +this.radius) // Set y position
+          .attr('cx', +this.x + +this.diameter / 2) // Set x position
+          .attr('cy', +this.y + +this.diameter / 2) // Set y position
           .on('click', function (evt) {
             return _this152.clickEvent.emit(evt);
           }) // Assign click event
@@ -111736,15 +111758,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             _iterator24.f();
           }
         }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._circle.remove();
-        }
       }]);
 
       return SvgCircleDirective;
@@ -111762,7 +111775,7 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         x: "x",
         y: "y",
         classes: "classes",
-        radius: "radius"
+        diameter: "diameter"
       },
       outputs: {
         clickEvent: "clickEvent",
@@ -111779,7 +111792,7 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
       }];
     };
 
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()], SvgCircleDirective.prototype, "radius", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()], SvgCircleDirective.prototype, "diameter", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()], SvgCircleDirective.prototype, "color", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()], SvgCircleDirective.prototype, "x", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()], SvgCircleDirective.prototype, "y", void 0);
@@ -111829,6 +111842,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._ellipse.remove();
+        }
+        /**
          * Is called when changes are made to the ellipse object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -111848,8 +111870,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -111867,8 +111889,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         value: function updateEllipse() {
           this._ellipse.size(this.width, this.height) // Update the width and height
           .fill(this.color) // Update the color
-          .attr('cx', +this.x + +this.width) // Set x position
-          .attr('cy', +this.y + +this.height); // Set y position
+          .attr('cx', +this.x + +this.width / 2) // Set x position
+          .attr('cy', +this.y + +this.height / 2); // Set y position
 
         }
         /**
@@ -111882,8 +111904,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
 
           this._ellipse = this._svgContainer.getContainer().ellipse(this.width, this.height) // Set height and width of the ellipse
           .fill(this.color) // Set fill color
-          .attr('cx', +this.x + +this.width) // Set x position
-          .attr('cy', +this.y + +this.height) // Set y position
+          .attr('cx', +this.x + +this.width / 2) // Set x position
+          .attr('cy', +this.y + +this.height / 2) // Set y position
           .on('click', function (evt) {
             return _this153.clickEvent.emit(evt);
           }) // Assign click event
@@ -111942,15 +111964,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           } finally {
             _iterator26.f();
           }
-        }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._ellipse.remove();
         }
       }]);
 
@@ -112042,6 +112055,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._line.remove();
+        }
+        /**
          * Is called when changes are made to the line object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -112061,8 +112083,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -112158,15 +112180,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             _iterator28.f();
           }
         }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._line.remove();
-        }
       }]);
 
       return SvgLineDirective;
@@ -112253,6 +112266,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._polyline.remove();
+        }
+        /**
          * Is called when changes are made to the polyline object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -112272,8 +112294,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -112371,15 +112393,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             _iterator30.f();
           }
         }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._polyline.remove();
-        }
       }]);
 
       return SvgPolylineDirective;
@@ -112462,6 +112475,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._polygon.remove();
+        }
+        /**
          * Is called when changes are made to the polygon object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -112481,8 +112503,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -112580,15 +112602,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             _iterator32.f();
           }
         }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._polygon.remove();
-        }
       }]);
 
       return SvgPolygonDirective;
@@ -112675,6 +112688,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._image.remove();
+        }
+        /**
          * Is called when changes are made to the image object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -112702,8 +112724,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -112805,15 +112827,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             _iterator34.f();
           }
         }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._image.remove();
-        }
       }]);
 
       return SvgImageDirective;
@@ -112910,6 +112923,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._path.remove();
+        }
+        /**
          * Is called when changes are made to the path object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -112929,8 +112951,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -112951,7 +112973,7 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             color: this.borderColor,
             width: this.borderSize
           }) // Update the border for the
-          .fill(this.fill === '' ? 'rgba(0, 0, 0, 0)' : this.fill) // Update fill of the path
+          .fill(this.fill || 'rgba(0, 0, 0, 0)') // Update fill of the path
           .move(this.x, this.y); // Update the location of the path
 
         }
@@ -112969,7 +112991,7 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             color: this.borderColor,
             width: this.borderSize
           }) // Set the border for the path
-          .fill(this.fill === '' ? 'rgba(0, 0, 0, 0)' : this.fill) // Set fill of the path
+          .fill(this.fill || 'rgba(0, 0, 0, 0)') // Set fill of the path
           .move(this.x, this.y) // Set the location of the path
           .on('click', function (evt) {
             return _this158.clickEvent.emit(evt);
@@ -113029,15 +113051,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           } finally {
             _iterator36.f();
           }
-        }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._path.remove();
         }
       }]);
 
@@ -113135,6 +113148,15 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
           }
         }
         /**
+         * Does all required pre-requisites before destroying the component.
+         */
+
+      }, {
+        key: "ngOnDestroy",
+        value: function ngOnDestroy() {
+          this._text.remove();
+        }
+        /**
          * Is called when changes are made to the text object.
          * @param changes - Angular Simple Changes object containing all of the changes.
          */
@@ -113154,8 +113176,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
                 });
               }); // Get classes that needs to be added
 
-              var classesToAdd = changes.classes.currentValue.filter(function (previousClass) {
-                return !changes.classes.previousValue.some(function (currentClass) {
+              var classesToAdd = changes.classes.currentValue.filter(function (currentClass) {
+                return !changes.classes.previousValue.some(function (previousClass) {
                   return currentClass === previousClass;
                 });
               }); // Add and remove classes
@@ -113253,15 +113275,6 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
             _iterator38.f();
           }
         }
-        /**
-         * Does all required pre-requisites before destroying the component.
-         */
-
-      }, {
-        key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          this._text.remove();
-        }
       }]);
 
       return SvgTextDirective;
@@ -113329,7 +113342,7 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
           selector: 'svg-container',
-          template: "<div [id]=\"containerId\" class=\"svg-container\" (mousemove)=\"mouseInContainer = true\"\n  (mousemove)=\"adjustPointPosition($event); adjustMouseMovePosition($event);\" (mouseenter)=\"mouseInContainer = true; mouseOverEvent.emit($event);\"\n  (mouseleave)=\"mouseInContainer = false; mouseOutEvent.emit($event);\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\" (click)=\"onPointClick()\" (mousemove)=\"onPointHover();\" [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    *ngIf=\"hoverable && mouseInContainer\" [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"></div>\n  \n  <ng-content></ng-content>\n</div>",
+          template: "<div [id]=\"containerId\" class=\"svg-container\"\n  (mousemove)=\"mouseInContainer = true; adjustPointPosition($event); adjustMouseMovePosition($event)\"\n  (mouseenter)=\"mouseInContainer = true; mouseOverEvent.emit($event)\"\n  (mouseleave)=\"mouseInContainer = false; mouseOutEvent.emit($event)\">\n  <div class=\"svg-hover-point\" (dblclick)=\"onPointDoubleClick()\"\n    (click)=\"onPointClick()\" (mousemove)=\"onPointHover()\"\n    [style.width.px]=\"pointSize\" [style.height.px]=\"pointSize\"\n    [style.left.px]=\"pointXCoordinate\" [style.top.px]=\"pointYCoordinate\"\n    *ngIf=\"hoverable && mouseInContainer\"></div>\n  \n  <ng-content></ng-content>\n</div>",
           styles: [".svg-hover-point{background-color:#000;border:1px solid #fff;position:absolute;border-radius:50%}.svg-container{position:relative}"]
         }]
       }], function () {
@@ -113459,7 +113472,7 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
         mouseOutEvent: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
         }],
-        radius: [{
+        diameter: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
         }]
       });
@@ -132692,9 +132705,9 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
     /* harmony import */
 
 
-    var _noop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-    /*! ./noop */
-    "./node_modules/rxjs/_esm2015/internal/util/noop.js");
+    var _identity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! ./identity */
+    "./node_modules/rxjs/_esm2015/internal/util/identity.js");
 
     function pipe() {
       for (var _len50 = arguments.length, fns = new Array(_len50), _key43 = 0; _key43 < _len50; _key43++) {
@@ -132705,8 +132718,8 @@ function _classCallCheck2(instance, Constructor) { if (!(instance instanceof Con
     }
 
     function pipeFromArray(fns) {
-      if (!fns) {
-        return _noop__WEBPACK_IMPORTED_MODULE_0__["noop"];
+      if (fns.length === 0) {
+        return _identity__WEBPACK_IMPORTED_MODULE_0__["identity"];
       }
 
       if (fns.length === 1) {

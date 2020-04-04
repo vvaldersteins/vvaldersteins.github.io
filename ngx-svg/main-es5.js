@@ -407,7 +407,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "i");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "v1.0.2");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "v1.1.0");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -634,7 +634,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       if (rf & 2) {
         var circle_r17 = ctx.$implicit;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("radius", circle_r17.radius)("color", circle_r17.color)("x", circle_r17.x)("y", circle_r17.y);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("diameter", circle_r17.diameter)("color", circle_r17.color)("x", circle_r17.x)("y", circle_r17.y);
       }
     }
 
@@ -662,7 +662,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r22);
 
           var circle_r19 = ctx.$implicit;
-          return circle_r19.radius = $event;
+          return circle_r19.diameter = $event;
         });
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -747,7 +747,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", circle_r19.radius);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", circle_r19.diameter);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
 
@@ -806,12 +806,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
          * Globally used variables within the component.
          */
         this.circles = [{
-          radius: 45,
+          diameter: 45,
           color: 'rgba(125, 125, 32, 0.5)',
           x: 20,
           y: 30
         }, {
-          radius: 30,
+          diameter: 30,
           color: 'rgba(12, 32, 222, 0.7)',
           x: 70,
           y: 30
@@ -826,7 +826,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "addNew",
         value: function addNew() {
           this.circles.push({
-            radius: 0,
+            diameter: 0,
             color: '#000',
             x: 0,
             y: 0
@@ -841,8 +841,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "getHeight",
         value: function getHeight() {
           return Math.max.apply(Math, this.circles.map(function (el) {
-            return el.radius * 2 + el.y;
-          })) + 20;
+            return el.diameter + el.y;
+          })) + 30;
         }
         /**
          * Removes specific circle element.
@@ -868,7 +868,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       selectors: [["ng-component"]],
       decls: 34,
       vars: 4,
-      consts: [[1, "jumbotron", "jumbotron-fluid"], [1, "container"], [1, "display-4", "text-center"], [1, "container-fluid"], [1, "row", "no-gutters"], [1, "col-12"], ["containerId", "circle", 3, "height"], [3, "radius", "color", "x", "y", 4, "ngFor", "ngForOf"], [1, "table-responsive"], [1, "table"], [4, "ngIf"], ["colspan", "6"], [1, "btn", "btn-success", "float-right", 3, "click"], [3, "radius", "color", "x", "y"], [4, "ngFor", "ngForOf"], [1, "align-middle"], ["type", "number", 1, "form-control", 3, "ngModel", "ngModelChange"], ["type", "string", 1, "form-control", 3, "ngModel", "ngModelChange"], [1, "btn", "btn-danger", 3, "click"], ["colspan", "6", 1, "text-center"]],
+      consts: [[1, "jumbotron", "jumbotron-fluid"], [1, "container"], [1, "display-4", "text-center"], [1, "container-fluid"], [1, "row", "no-gutters"], [1, "col-12"], ["containerId", "circle", 3, "height"], [3, "diameter", "color", "x", "y", 4, "ngFor", "ngForOf"], [1, "table-responsive"], [1, "table"], [4, "ngIf"], ["colspan", "6"], [1, "btn", "btn-success", "float-right", 3, "click"], [3, "diameter", "color", "x", "y"], [4, "ngFor", "ngForOf"], [1, "align-middle"], ["type", "number", 1, "form-control", 3, "ngModel", "ngModelChange"], ["type", "string", 1, "form-control", 3, "ngModel", "ngModelChange"], [1, "btn", "btn-danger", 3, "click"], ["colspan", "6", 1, "text-center"]],
       template: function CircleComponent_Template(rf, ctx) {
         if (rf & 1) {
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
@@ -917,7 +917,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "th");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, "Radius");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, "Diameter");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -4358,7 +4358,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](820, "td");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](821, "radius");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](821, "diameter");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -4376,7 +4376,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](826, "td");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](827, "Radius of the circle.");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](827, "Diameter of the circle.");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -12492,7 +12492,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "getHeight",
         value: function getHeight() {
           return Math.max.apply(Math, this.texts.map(function (el) {
-            return el.y;
+            return el.y + el.size;
           })) + 20;
         }
         /**
