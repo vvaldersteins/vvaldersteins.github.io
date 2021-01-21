@@ -34616,6 +34616,10 @@
 
           this.y = 0; // Starting point on y axis.
 
+          this.rx = 0; // Radius for x axis.
+
+          this.ry = 0; // Radius for y axis.
+
           this.classes = []; // List of CSS classes which needs to be added.
 
           /**
@@ -34688,6 +34692,7 @@
           value: function updateRect() {
             this._rect.size(this.width, this.height) // Update the width and height
             .fill(this.color) // Update the color
+            .radius(this.rx, this.ry) // Update the radius
             .move(this.x, this.y); // Update the coordinates
 
           }
@@ -34703,6 +34708,7 @@
             this._rect = this._svgContainer.getContainer().rect(this.width, this.height) // Set height and width of the rect
             .fill(this.color) // Set fill color
             .move(this.x, this.y) // Set coordinates
+            .radius(this.rx, this.ry) // Set radius
             .on('click', function (evt) {
               return _this106.clickEvent.emit(evt);
             }) // Assign click event
@@ -34778,6 +34784,8 @@
           color: "color",
           x: "x",
           y: "y",
+          rx: "rx",
+          ry: "ry",
           classes: "classes",
           height: "height",
           width: "width"
@@ -34811,6 +34819,12 @@
           type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }],
         y: [{
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
+        }],
+        rx: [{
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
+        }],
+        ry: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }],
         classes: [{
@@ -34848,6 +34862,12 @@
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
           }],
           y: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
+          }],
+          rx: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
+          }],
+          ry: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
           }],
           classes: [{

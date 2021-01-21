@@ -25111,6 +25111,8 @@ class SvgRectDirective {
         this.color = '#000'; // Color of the rectangular background
         this.x = 0; // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
+        this.rx = 0; // Radius for x axis.
+        this.ry = 0; // Radius for y axis.
         this.classes = []; // List of CSS classes which needs to be added.
         /**
          * Output variables for the rectangular directive.
@@ -25161,6 +25163,7 @@ class SvgRectDirective {
         this._rect
             .size(this.width, this.height) // Update the width and height
             .fill(this.color) // Update the color
+            .radius(this.rx, this.ry) // Update the radius
             .move(this.x, this.y); // Update the coordinates
     }
     /**
@@ -25171,6 +25174,7 @@ class SvgRectDirective {
             .rect(this.width, this.height) // Set height and width of the rect
             .fill(this.color) // Set fill color
             .move(this.x, this.y) // Set coordinates
+            .radius(this.rx, this.ry) // Set radius
             .on('click', (evt) => this.clickEvent.emit(evt)) // Assign click event
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
@@ -25197,7 +25201,7 @@ class SvgRectDirective {
     }
 }
 SvgRectDirective.ɵfac = function SvgRectDirective_Factory(t) { return new (t || SvgRectDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
-SvgRectDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgRectDirective, selectors: [["svg-rect"]], inputs: { color: "color", x: "x", y: "y", classes: "classes", height: "height", width: "width" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
+SvgRectDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgRectDirective, selectors: [["svg-rect"]], inputs: { color: "color", x: "x", y: "y", rx: "rx", ry: "ry", classes: "classes", height: "height", width: "width" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgRectDirective.ctorParameters = () => [
     { type: SvgContainerComponent }
 ];
@@ -25207,6 +25211,8 @@ SvgRectDirective.propDecorators = {
     color: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
     x: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
     y: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
+    rx: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
+    ry: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
     classes: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
     clickEvent: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"] }],
     doubleClickEvent: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"] }],
@@ -25223,6 +25229,10 @@ SvgRectDirective.propDecorators = {
         }], x: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], y: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
+        }], rx: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
+        }], ry: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], classes: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
