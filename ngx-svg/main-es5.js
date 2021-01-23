@@ -8871,7 +8871,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "i");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "v1.2.1");
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "v1.3.0");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 

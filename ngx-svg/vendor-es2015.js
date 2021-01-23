@@ -25105,9 +25105,11 @@ class SvgRectDirective {
     /**
      * Create SVG Rect directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         this.color = '#000'; // Color of the rectangular background
         this.x = 0; // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
@@ -25165,6 +25167,8 @@ class SvgRectDirective {
             .fill(this.color) // Update the color
             .radius(this.rx, this.ry) // Update the radius
             .move(this.x, this.y); // Update the coordinates
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create rectangular object within the SVG container.
@@ -25179,8 +25183,21 @@ class SvgRectDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the rect
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._rect.position() !== position) {
+            this._rect.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the rect object.
@@ -25200,10 +25217,11 @@ class SvgRectDirective {
         }
     }
 }
-SvgRectDirective.ɵfac = function SvgRectDirective_Factory(t) { return new (t || SvgRectDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgRectDirective.ɵfac = function SvgRectDirective_Factory(t) { return new (t || SvgRectDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgRectDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgRectDirective, selectors: [["svg-rect"]], inputs: { color: "color", x: "x", y: "y", rx: "rx", ry: "ry", classes: "classes", height: "height", width: "width" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgRectDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgRectDirective.propDecorators = {
     height: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -25224,7 +25242,7 @@ SvgRectDirective.propDecorators = {
         args: [{
                 selector: 'svg-rect'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { color: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { color: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], x: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -25257,9 +25275,11 @@ class SvgCircleDirective {
     /**
      * Create SVG Circle directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         this.color = '#000'; // Color of the circle background
         this.x = 0; // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
@@ -25316,6 +25336,8 @@ class SvgCircleDirective {
             .fill(this.color) // Set the fill color
             .attr('cx', +this.x + +this.diameter / 2) // Set x position
             .attr('cy', +this.y + +this.diameter / 2); // Set y position
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create circle object within the SVG container.
@@ -25330,8 +25352,21 @@ class SvgCircleDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the circle
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._circle.position() !== position) {
+            this._circle.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the circle object.
@@ -25351,10 +25386,11 @@ class SvgCircleDirective {
         }
     }
 }
-SvgCircleDirective.ɵfac = function SvgCircleDirective_Factory(t) { return new (t || SvgCircleDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgCircleDirective.ɵfac = function SvgCircleDirective_Factory(t) { return new (t || SvgCircleDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgCircleDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgCircleDirective, selectors: [["svg-circle"]], inputs: { color: "color", x: "x", y: "y", classes: "classes", diameter: "diameter" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgCircleDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgCircleDirective.propDecorators = {
     diameter: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -25372,7 +25408,7 @@ SvgCircleDirective.propDecorators = {
         args: [{
                 selector: 'svg-circle'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { color: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { color: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], x: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -25399,9 +25435,11 @@ class SvgEllipseDirective {
     /**
      * Create SVG Ellipse directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         this.color = '#000'; // Color of the ellipse background
         this.x = 0; // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
@@ -25457,6 +25495,8 @@ class SvgEllipseDirective {
             .fill(this.color) // Update the color
             .attr('cx', +this.x + +this.width / 2) // Set x position
             .attr('cy', +this.y + +this.height / 2); // Set y position
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create ellipse object within the SVG container.
@@ -25471,8 +25511,21 @@ class SvgEllipseDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the ellipse
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._ellipse.position() !== position) {
+            this._ellipse.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the ellipse object.
@@ -25492,10 +25545,11 @@ class SvgEllipseDirective {
         }
     }
 }
-SvgEllipseDirective.ɵfac = function SvgEllipseDirective_Factory(t) { return new (t || SvgEllipseDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgEllipseDirective.ɵfac = function SvgEllipseDirective_Factory(t) { return new (t || SvgEllipseDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgEllipseDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgEllipseDirective, selectors: [["svg-ellipse"]], inputs: { color: "color", x: "x", y: "y", classes: "classes", height: "height", width: "width" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgEllipseDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgEllipseDirective.propDecorators = {
     height: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -25514,7 +25568,7 @@ SvgEllipseDirective.propDecorators = {
         args: [{
                 selector: 'svg-ellipse'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { color: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { color: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], x: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -25543,9 +25597,11 @@ class SvgLineDirective {
     /**
      * Create SVG Line directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         this.borderColor = '#000'; // Color of the line.
         this.x0 = 0; // Starting point on x axis.
         this.y0 = 0; // Starting point on y axis.
@@ -25601,6 +25657,8 @@ class SvgLineDirective {
         this._line
             .plot(this.x0, this.y0, this.x1, this.y1) // Create the line at specific position
             .stroke({ color: this.borderColor, width: this.borderSize }); // Set the border for the line
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create line object within the SVG container.
@@ -25613,8 +25671,21 @@ class SvgLineDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the line
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._line.position() !== position) {
+            this._line.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the line object.
@@ -25634,10 +25705,11 @@ class SvgLineDirective {
         }
     }
 }
-SvgLineDirective.ɵfac = function SvgLineDirective_Factory(t) { return new (t || SvgLineDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgLineDirective.ɵfac = function SvgLineDirective_Factory(t) { return new (t || SvgLineDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgLineDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgLineDirective, selectors: [["svg-line"]], inputs: { borderColor: "borderColor", x0: "x0", y0: "y0", x1: "x1", y1: "y1", classes: "classes", borderSize: "borderSize" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgLineDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgLineDirective.propDecorators = {
     borderSize: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -25657,7 +25729,7 @@ SvgLineDirective.propDecorators = {
         args: [{
                 selector: 'svg-line'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { borderColor: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { borderColor: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], x0: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -25688,9 +25760,11 @@ class SvgPolylineDirective {
     /**
      * Create SVG Polyline directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         this.borderColor = '#000'; // Color of the polyline.
         this.fill = '#000'; // Color of the polyline body
         this.classes = []; // List of CSS classes which needs to be added.
@@ -25744,6 +25818,8 @@ class SvgPolylineDirective {
             .plot(this.points) // Update the polyline object
             .fill(this.fill) // Fill color of the polyline
             .stroke({ color: this.borderColor, width: this.borderSize }); // Set the border for the polyline
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create polyline object within the SVG container.
@@ -25757,8 +25833,21 @@ class SvgPolylineDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the polyline
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._polyline.position() !== position) {
+            this._polyline.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the polyline object.
@@ -25778,10 +25867,11 @@ class SvgPolylineDirective {
         }
     }
 }
-SvgPolylineDirective.ɵfac = function SvgPolylineDirective_Factory(t) { return new (t || SvgPolylineDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgPolylineDirective.ɵfac = function SvgPolylineDirective_Factory(t) { return new (t || SvgPolylineDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgPolylineDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgPolylineDirective, selectors: [["svg-polyline"]], inputs: { borderColor: "borderColor", fill: "fill", classes: "classes", points: "points", borderSize: "borderSize" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgPolylineDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgPolylineDirective.propDecorators = {
     points: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -25799,7 +25889,7 @@ SvgPolylineDirective.propDecorators = {
         args: [{
                 selector: 'svg-polyline'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { borderColor: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { borderColor: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], fill: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -25826,9 +25916,11 @@ class SvgPolygonDirective {
     /**
      * Create SVG Polygon directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         this.borderColor = '#000'; // Color of the polygon.
         this.fill = '#000'; // Color of the polygon body.
         this.classes = []; // List of CSS classes which needs to be added.
@@ -25882,6 +25974,8 @@ class SvgPolygonDirective {
             .plot(this.points) // Update the polygon object
             .fill(this.fill) // Fill color of the polygon
             .stroke({ color: this.borderColor, width: this.borderSize }); // Set the border for the polygon
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create polygon object within the SVG container.
@@ -25895,8 +25989,21 @@ class SvgPolygonDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the polygon
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._polygon.position() !== position) {
+            this._polygon.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the polygon object.
@@ -25916,10 +26023,11 @@ class SvgPolygonDirective {
         }
     }
 }
-SvgPolygonDirective.ɵfac = function SvgPolygonDirective_Factory(t) { return new (t || SvgPolygonDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgPolygonDirective.ɵfac = function SvgPolygonDirective_Factory(t) { return new (t || SvgPolygonDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgPolygonDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgPolygonDirective, selectors: [["svg-polygon"]], inputs: { borderColor: "borderColor", fill: "fill", classes: "classes", points: "points", borderSize: "borderSize" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgPolygonDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgPolygonDirective.propDecorators = {
     points: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -25937,7 +26045,7 @@ SvgPolygonDirective.propDecorators = {
         args: [{
                 selector: 'svg-polygon'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { borderColor: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { borderColor: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], fill: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -25964,9 +26072,11 @@ class SvgImageDirective {
     /**
      * Create SVG image directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         this.x = 0; // Starting point on x axis.
         this.y = 0; // Starting point on y axis.
         this.height = 100; // Height of the image.
@@ -26042,6 +26152,8 @@ class SvgImageDirective {
                 .size(this.width, this.height) // Update image size
                 .move(this.x, this.y); // Update image position
         }
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create image object within the SVG container.
@@ -26056,8 +26168,21 @@ class SvgImageDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the image
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._image.position() !== position) {
+            this._image.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the image object.
@@ -26077,10 +26202,11 @@ class SvgImageDirective {
         }
     }
 }
-SvgImageDirective.ɵfac = function SvgImageDirective_Factory(t) { return new (t || SvgImageDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgImageDirective.ɵfac = function SvgImageDirective_Factory(t) { return new (t || SvgImageDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgImageDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgImageDirective, selectors: [["svg-image"]], inputs: { x: "x", y: "y", height: "height", width: "width", classes: "classes", imageUrl: "imageUrl" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgImageDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgImageDirective.propDecorators = {
     imageUrl: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -26099,7 +26225,7 @@ SvgImageDirective.propDecorators = {
         args: [{
                 selector: 'svg-image'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { x: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { x: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], y: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -26128,9 +26254,11 @@ class SvgPathDirective {
     /**
      * Create SVG Path directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         /**
          * Import variables for the path directive.
          */
@@ -26192,6 +26320,8 @@ class SvgPathDirective {
             .stroke({ color: this.borderColor, width: this.borderSize }) // Update the border for the
             .fill(this.fill || 'rgba(0, 0, 0, 0)') // Update fill of the path
             .move(this.x, this.y); // Update the location of the path
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create path object within the SVG container.
@@ -26206,8 +26336,21 @@ class SvgPathDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the path
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._path.position() !== position) {
+            this._path.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the path object.
@@ -26227,10 +26370,11 @@ class SvgPathDirective {
         }
     }
 }
-SvgPathDirective.ɵfac = function SvgPathDirective_Factory(t) { return new (t || SvgPathDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgPathDirective.ɵfac = function SvgPathDirective_Factory(t) { return new (t || SvgPathDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgPathDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgPathDirective, selectors: [["svg-path"]], inputs: { path: "path", borderColor: "borderColor", borderSize: "borderSize", x: "x", y: "y", fill: "fill", classes: "classes" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgPathDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgPathDirective.propDecorators = {
     path: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -26250,7 +26394,7 @@ SvgPathDirective.propDecorators = {
         args: [{
                 selector: 'svg-path'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { path: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { path: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], borderColor: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
@@ -26281,9 +26425,11 @@ class SvgTextDirective {
     /**
      * Create SVG Text directive.
      * @param _svgContainer - Host SVG Container Component object instance.
+     * @param _elRef - Angular element reference object instance.
      */
-    constructor(_svgContainer) {
+    constructor(_svgContainer, _elRef) {
         this._svgContainer = _svgContainer;
+        this._elRef = _elRef;
         /**
          * Import variables for the text directive.
          */
@@ -26346,6 +26492,8 @@ class SvgTextDirective {
             size: this.size // Update the size of the text
         })
             .move(this.x, this.y); // Update the location of the text
+        // Let's set element in a correct position
+        this.setCorrectPosition();
     }
     /**
      * Create text object within the SVG container.
@@ -26362,8 +26510,21 @@ class SvgTextDirective {
             .on('dblclick', (evt) => this.doubleClickEvent.emit(evt)) // Assign double click event
             .on('mouseover', (evt) => this.mouseOverEvent.emit(evt)) // Assign mouse over event
             .on('mouseout', (evt) => this.mouseOutEvent.emit(evt)); // Assign mouse out event
+        // Let's set element in a correct position
+        this.setCorrectPosition();
         // Add classes to the text
         this.addRemoveClasses(this.classes);
+    }
+    /**
+     * Sets correct position for the element.
+     */
+    setCorrectPosition() {
+        // Find position of an element within the parent container
+        const position = Array.prototype.slice.call(this._elRef.nativeElement.parentElement.children).indexOf(this._elRef.nativeElement);
+        // Let's update and insert element in a correct position.
+        if (this._svgContainer.getContainer().get(position) && this._text.position() !== position) {
+            this._text.insertBefore(this._svgContainer.getContainer().get(position));
+        }
     }
     /**
      * Adds classes to the text object.
@@ -26383,10 +26544,11 @@ class SvgTextDirective {
         }
     }
 }
-SvgTextDirective.ɵfac = function SvgTextDirective_Factory(t) { return new (t || SvgTextDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent)); };
+SvgTextDirective.ɵfac = function SvgTextDirective_Factory(t) { return new (t || SvgTextDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](SvgContainerComponent), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])); };
 SvgTextDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineDirective"]({ type: SvgTextDirective, selectors: [["svg-text"]], inputs: { color: "color", text: "text", x: "x", y: "y", size: "size", classes: "classes" }, outputs: { clickEvent: "clickEvent", doubleClickEvent: "doubleClickEvent", mouseOverEvent: "mouseOverEvent", mouseOutEvent: "mouseOutEvent" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵNgOnChangesFeature"]] });
 SvgTextDirective.ctorParameters = () => [
-    { type: SvgContainerComponent }
+    { type: SvgContainerComponent },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }
 ];
 SvgTextDirective.propDecorators = {
     color: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"] }],
@@ -26405,7 +26567,7 @@ SvgTextDirective.propDecorators = {
         args: [{
                 selector: 'svg-text'
             }]
-    }], function () { return [{ type: SvgContainerComponent }]; }, { color: [{
+    }], function () { return [{ type: SvgContainerComponent }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"] }]; }, { color: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }], text: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
